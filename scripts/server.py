@@ -8,13 +8,14 @@ import json
 import unicodedata
 from contextlib import asynccontextmanager
 from pathlib import Path
+from typing import Annotated, Literal
 
 import chromadb
 import httpx
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from sentence_transformers import SentenceTransformer
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
@@ -30,11 +31,12 @@ OLLAMA_MODEL = "llama3:8b"
 TOP_K = 5
 SIM_THRESHOLD = 0.65
 MAX_CONTEXT_CHARS = 3000 * 4
+MAX_STREAM_TOKENS = 2048
 
 SYSTEM_PROMPT = """\
 You are Kaipilina Noeau, a teaching assistant that helps K–6 teachers in Hawaiʻi find and use culturally relevant lesson plans.
 
-Answer questions ONLY using the lesson plan content provided below. Do not add information from outside these lessons. If the provided content does not answer the question, say: "I don’t see that covered in the matched lessons — try rephrasing or selecting a different grade."
+Answer questions ONLY using the lesson plan content provided below. Do not add information from outside these lessons. If the provided content does not answer the question, say: "I don't see that covered in the matched lessons — try rephrasing or selecting a different grade."
 
 Treat Hawaiian cultural content with care. Use Hawaiian terms as written (with ʻokina and kahākō intact). Do not translate or interpret Hawaiian terms beyond what the lesson provides.
 
@@ -44,6 +46,8 @@ Always end your response by citing the lesson(s) you drew from, e.g.: "Source: L
 state: dict = {}
 limiter = Limiter(key_func=get_remote_address)
 
+GradeValue = Literal["all", "K", "1", "2", "3", "4", "5", "6"]
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -51,7 +55,10 @@ async def lifespan(app: FastAPI):
     state["model"] = SentenceTransformer(EMBED_MODEL)
 
     client = chromadb.PersistentClient(path=str(CHROMA_DIR))
-    state["collection"] = client.get_collection("lessons")
+    state["collection"] = client.get_or_create_collection(
+        name="lessons",
+        metadata={"hnsw:space": "cosine"},
+    )
 
     state["glossary"] = json.loads(GLOSSARY_PATH.read_text()) if GLOSSARY_PATH.exists() else {}
     state["grade_map"] = json.loads(GRADE_MAP_PATH.read_text()) if GRADE_MAP_PATH.exists() else {}
@@ -76,20 +83,20 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=["https://kapilinanoeau.org", "http://localhost:3000"],
     allow_methods=["GET", "POST"],
-    allow_headers=["*"],
+    allow_headers=["Content-Type"],
 )
 
 
 class Message(BaseModel):
     role: str
-    content: str
+    content: Annotated[str, Field(max_length=8000)]
 
 
 class QueryRequest(BaseModel):
-    question: str
-    grade: str = "all"
+    question: Annotated[str, Field(min_length=1, max_length=500)]
+    grade: GradeValue = "all"
     subject: str | None = None
-    messages: list[Message] = []
+    messages: Annotated[list[Message], Field(max_length=50)] = []
 
 
 @app.get("/health")
@@ -137,7 +144,7 @@ async def sse_stream(request: QueryRequest):
                 if (1 - dist) >= SIM_THRESHOLD and grade_ok(m)]
 
     if not filtered:
-        msg = "I don’t see that covered in the matched lessons — try rephrasing or selecting a different grade."
+        msg = "I don't see that covered in the matched lessons — try rephrasing or selecting a different grade."
         yield f"data: {json.dumps({'token': msg})}\n\n"
         yield f"data: {json.dumps({'done': True, 'sources': [], 'glossary': []})}\n\n"
         return
@@ -153,29 +160,35 @@ async def sse_stream(request: QueryRequest):
             sources.append({"title": m.get("title", fn), "lesson": m.get("lesson", ""),
                             "grades": m.get("grades", ""), "filename": fn})
 
-    history_lines = [
-        f"{'Teacher' if m.role == 'user' else 'Assistant'}: {m.content}"
-        for m in request.messages[-8:]
+    # Build structured messages for /api/chat — Ollama enforces role boundaries,
+    # preventing prompt injection via user-controlled question or history content.
+    messages = [
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "user", "content": f"Retrieved lesson content:\n{context}"},
     ]
-    history = "\n".join(history_lines)
-
-    prompt = f"{SYSTEM_PROMPT}\n\nRetrieved lesson content:\n{context}"
-    if history:
-        prompt += f"\n\nConversation so far:\n{history}"
-    prompt += f"\n\nTeacher's question: {request.question}"
+    for m in request.messages[-8:]:
+        messages.append({"role": m.role, "content": m.content})
+    messages.append({"role": "user", "content": request.question})
 
     full_tokens: list[str] = []
+    token_count = 0
     async with httpx.AsyncClient(timeout=60) as c:
-        async with c.stream("POST", f"{OLLAMA_HOST}/api/generate",
-                            json={"model": OLLAMA_MODEL, "prompt": prompt, "stream": True}) as r:
+        async with c.stream("POST", f"{OLLAMA_HOST}/api/chat",
+                            json={"model": OLLAMA_MODEL, "messages": messages, "stream": True}) as r:
             async for line in r.aiter_lines():
                 if not line:
                     continue
-                chunk = json.loads(line)
-                token = chunk.get("response", "")
+                try:
+                    chunk = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                token = chunk.get("message", {}).get("content", "")
                 if token:
                     full_tokens.append(token)
+                    token_count += 1
                     yield f"data: {json.dumps({'token': token})}\n\n"
+                    if token_count >= MAX_STREAM_TOKENS:
+                        break
                 if chunk.get("done"):
                     break
 

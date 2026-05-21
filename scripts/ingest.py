@@ -8,7 +8,6 @@ Idempotent: SHA-256 chunk IDs deduplicate on re-run.
 import hashlib
 import json
 import re
-import unicodedata
 from pathlib import Path
 
 import chromadb
@@ -23,13 +22,15 @@ CHUNK_CHARS = 512 * 4      # ~512 tokens
 OVERLAP_CHARS = 64 * 4     # ~64 tokens
 MIN_PDF_PAGE_CHARS = 100   # skip image-only pages
 
+assert CHUNK_CHARS > OVERLAP_CHARS, "CHUNK_CHARS must exceed OVERLAP_CHARS to avoid infinite loop"
+
 
 def chunk_text(text: str) -> list[str]:
+    step = CHUNK_CHARS - OVERLAP_CHARS
     chunks, start = [], 0
     while start < len(text):
-        end = start + CHUNK_CHARS
-        chunks.append(text[start:end].strip())
-        start += CHUNK_CHARS - OVERLAP_CHARS
+        chunks.append(text[start:start + CHUNK_CHARS].strip())
+        start += step
     return [c for c in chunks if len(c) > 80]
 
 
@@ -37,10 +38,12 @@ def extract_docx(path: Path) -> str:
     from docx import Document
     doc = Document(path)
     parts = [p.text.strip() for p in doc.paragraphs if p.text.strip()]
+    seen_cells: set[int] = set()
     for table in doc.tables:
         for row in table.rows:
             for cell in row.cells:
-                if cell.text.strip():
+                if id(cell) not in seen_cells and cell.text.strip():
+                    seen_cells.add(id(cell))
                     parts.append(cell.text.strip())
     return "\n".join(parts)
 
@@ -84,7 +87,12 @@ def main():
         metadata={"hnsw:space": "cosine"},
     )
 
-    files = sorted(f for f in LESSONS_DIR.glob("*") if f.suffix.lower() in {".docx", ".pptx", ".pdf"})
+    lessons_root = LESSONS_DIR.resolve()
+    files = sorted(
+        f for f in LESSONS_DIR.glob("*")
+        if f.suffix.lower() in {".docx", ".pptx", ".pdf"}
+        and f.resolve().is_relative_to(lessons_root)
+    )
     print(f"{len(files)} lesson files found\n")
 
     for path in files:
