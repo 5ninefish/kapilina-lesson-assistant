@@ -1,0 +1,11 @@
+{
+  "L1": {"grades": ["4", "5"], "title": "Hale / Angles"},
+  "L2": {"grades": ["4", "5"], "title": "Loko Iʻa / Fish Fractions"},
+  "L3": {"grades": ["4", "5"], "title": "Kiʻi Pōhaku / Cryptography"},
+  "L4": {"grades": ["4", "5"], "title": "Kimona / Dash Robot"},
+  "L5": {"grades": ["4", "5"], "title": "Lauhala / Artist"},
+  "L6": {"grades": ["4", "5"], "title": "Quilt / Binary"},
+  "L7": {"grades": ["4", "5"], "title": "ʻAuwai / Measurements"},
+  "L8": {"grades": ["4", "5"], "title": "Wayfinding / Battleship"},
+  "L9": {"grades": ["4", "5"], "title": "Ahupuaʻa / Kapu"}
+}
