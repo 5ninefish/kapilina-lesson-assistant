@@ -1,11 +1,11 @@
 {
-  "L1": {"grades": ["4", "5"], "title": "Hale / Angles"},
-  "L2": {"grades": ["4", "5"], "title": "Loko Iʻa / Fish Fractions"},
-  "L3": {"grades": ["4", "5"], "title": "Kiʻi Pōhaku / Cryptography"},
-  "L4": {"grades": ["4", "5"], "title": "Kimona / Dash Robot"},
-  "L5": {"grades": ["4", "5"], "title": "Lauhala / Artist"},
-  "L6": {"grades": ["4", "5"], "title": "Quilt / Binary"},
-  "L7": {"grades": ["4", "5"], "title": "ʻAuwai / Measurements"},
-  "L8": {"grades": ["4", "5"], "title": "Wayfinding / Battleship"},
-  "L9": {"grades": ["4", "5"], "title": "Ahupuaʻa / Kapu"}
+  "L1": {"grades": ["4", "5"], "title": "Hale / Angles", "filename": "L1_A Hale Made of Angles & Hale Angles.docx"},
+  "L2": {"grades": ["4", "5"], "title": "Loko Iʻa / Fish Fractions", "filename": "L2_Local Loko I'a Lifestyle & Loko I'a Launchers.docx"},
+  "L3": {"grades": ["4", "5"], "title": "Kiʻi Pōhaku / Cryptography", "filename": "L3_The Mystery of Hawaiian Ki‘i Pōhaku & Hidden Messages_ Cryptography.docx"},
+  "L4": {"grades": ["4", "5"], "title": "Kimona / Dash Robot", "filename": "L4_Kimona Says Program & Dash Says Aloha.docx"},
+  "L5": {"grades": ["4", "5"], "title": "Lauhala / Artist", "filename": "L5_ Lauhala Craftsmen & The Artist.docx"},
+  "L6": {"grades": ["4", "5"], "title": "Quilt / Binary", "filename": "L6_Reflecting on Hawaiian Quilt Symmetry & Creating Hawaiian Quilt Patterns with Binary.docx"},
+  "L7": {"grades": ["4", "5"], "title": "ʻAuwai / Measurements", "filename": "L7_Hanawai & Dash-ing Through Auwai.docx"},
+  "L8": {"grades": ["4", "5"], "title": "Wayfinding / Battleship", "filename": "L8_Wayfinding & Coordinate Battleship.docx"},
+  "L9": {"grades": ["4", "5"], "title": "Ahupuaʻa / Kapu", "filename": "L9_Ahupua‘a and Kapu Systems of Order & Lei Order of Operations.docx"}
 }

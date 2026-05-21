@@ -5,6 +5,7 @@ FastAPI + streaming SSE + conversation history + Hawaiian glossary tooltips.
 """
 
 import json
+import re
 import unicodedata
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -29,7 +30,7 @@ EMBED_MODEL = "intfloat/multilingual-e5-large"
 OLLAMA_HOST = "http://localhost:11434"
 OLLAMA_MODEL = "llama3:8b"
 TOP_K = 5
-SIM_THRESHOLD = 0.65
+SIM_THRESHOLD = 0.50
 MAX_CONTEXT_CHARS = 3000 * 4
 MAX_STREAM_TOKENS = 2048
 
@@ -53,6 +54,7 @@ GradeValue = Literal["all", "K", "1", "2", "3", "4", "5", "6"]
 async def lifespan(app: FastAPI):
     print("Loading embedding model...")
     state["model"] = SentenceTransformer(EMBED_MODEL)
+    state["model"].encode("query: warm up", normalize_embeddings=True)
 
     client = chromadb.PersistentClient(path=str(CHROMA_DIR))
     state["collection"] = client.get_or_create_collection(
@@ -66,8 +68,8 @@ async def lifespan(app: FastAPI):
     print("Pre-warming Ollama...")
     async with httpx.AsyncClient(timeout=30) as c:
         try:
-            await c.post(f"{OLLAMA_HOST}/api/generate",
-                         json={"model": OLLAMA_MODEL, "prompt": "hi", "stream": False})
+            await c.post(f"{OLLAMA_HOST}/api/chat",
+                         json={"model": OLLAMA_MODEL, "messages": [{"role": "user", "content": "hi"}], "stream": False})
         except Exception as e:
             print(f"Ollama pre-warm failed (non-fatal): {e}")
 
@@ -81,7 +83,8 @@ app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://kapilinanoeau.org", "http://localhost:3000"],
+    allow_origins=["https://kapilinanoeau.org"],
+    allow_origin_regex=r"http://localhost:\d+",
     allow_methods=["GET", "POST"],
     allow_headers=["Content-Type"],
 )
@@ -204,3 +207,177 @@ async def query(body: QueryRequest, request: Request):
         media_type="text/event-stream",
         headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
     )
+
+import re as _re
+
+
+def _parse_lesson_num(name: str) -> str | None:
+    m = _re.match(r"(L\d+)", name, _re.IGNORECASE)
+    return m.group(1).upper() if m else None
+
+
+def _extract_lesson_text(path):
+    ext = path.suffix.lower()
+    if ext == ".docx":
+        from docx import Document
+        doc = Document(path)
+        parts = [p.text.strip() for p in doc.paragraphs if p.text.strip()]
+        seen: set = set()
+        for table in doc.tables:
+            for row in table.rows:
+                for cell in row.cells:
+                    if id(cell) not in seen and cell.text.strip():
+                        seen.add(id(cell))
+                        parts.append(cell.text.strip())
+        return "\n\n".join(parts)
+    elif ext == ".pptx":
+        from pptx import Presentation
+        parts = []
+        for slide in Presentation(path).slides:
+            for shape in slide.shapes:
+                if hasattr(shape, "text") and shape.text.strip():
+                    parts.append(shape.text.strip())
+        return "\n\n".join(parts)
+    else:
+        import pdfplumber
+        parts = []
+        with pdfplumber.open(path) as pdf:
+            for page in pdf.pages:
+                t = page.extract_text() or ""
+                if len(t.strip()) >= 100:
+                    parts.append(t.strip())
+        return "\n\n".join(parts)
+
+
+def _extract_lesson_html(path):
+    import html as _html
+    ext = path.suffix.lower()
+
+    if ext == ".docx":
+        from docx import Document
+        doc = Document(path)
+        parts: list[str] = []
+        pending_li: list[str] = []
+
+        def flush_list():
+            if pending_li:
+                parts.append('<ul>' + ''.join(f'<li>{x}</li>' for x in pending_li) + '</ul>')
+                pending_li.clear()
+
+        for p in doc.paragraphs:
+            text = p.text.strip()
+            if not text:
+                flush_list()
+                continue
+            style = (p.style.name if p.style else '').lower()
+            if any(h in style for h in ('heading 1', 'title')):
+                flush_list()
+                parts.append(f'<h2>{_html.escape(text)}</h2>')
+            elif 'heading 2' in style:
+                flush_list()
+                parts.append(f'<h3>{_html.escape(text)}</h3>')
+            elif any(h in style for h in ('heading 3', 'heading 4', 'heading 5', 'heading 6')):
+                flush_list()
+                parts.append(f'<h4>{_html.escape(text)}</h4>')
+            elif 'list' in style:
+                pending_li.append(_html.escape(text))
+            else:
+                runs = [r for r in p.runs if r.text.strip()]
+                if runs and all(r.bold for r in runs) and len(text) <= 120:
+                    flush_list()
+                    parts.append(f'<h4>{_html.escape(text)}</h4>')
+                else:
+                    flush_list()
+                    parts.append(f'<p>{_html.escape(text)}</p>')
+
+        flush_list()
+
+        seen: set = set()
+        for table in doc.tables:
+            rows_html = []
+            for row in table.rows:
+                cells = []
+                for cell in row.cells:
+                    if id(cell) not in seen and cell.text.strip():
+                        seen.add(id(cell))
+                        cells.append(f'<td>{_html.escape(cell.text.strip())}</td>')
+                if cells:
+                    rows_html.append('<tr>' + ''.join(cells) + '</tr>')
+            if rows_html:
+                parts.append('<table class="ltable"><tbody>' + ''.join(rows_html) + '</tbody></table>')
+
+        return '\n'.join(parts)
+
+    elif ext == ".pptx":
+        from pptx import Presentation
+        parts = []
+        for i, slide in enumerate(Presentation(path).slides, 1):
+            texts = [s.text.strip() for s in slide.shapes if hasattr(s, 'text') and s.text.strip()]
+            if not texts:
+                continue
+            parts.append(f'<h3>Slide {i}</h3>')
+            for t in texts:
+                parts.append(f'<p>{_html.escape(t)}</p>')
+        return '\n'.join(parts)
+
+    else:
+        import pdfplumber
+        parts = []
+        with pdfplumber.open(path) as pdf:
+            for page in pdf.pages:
+                t = page.extract_text() or ""
+                if len(t.strip()) < 100:
+                    continue
+                for line in t.strip().split('\n'):
+                    if line.strip():
+                        parts.append(f'<p>{_html.escape(line.strip())}</p>')
+        return '\n'.join(parts)
+
+
+@app.get("/lesson/{lesson_id}")
+async def get_lesson(lesson_id: str):
+    from fastapi import HTTPException
+    lid = lesson_id.upper()
+    if not _re.match(r"^L\d+$", lid):
+        raise HTTPException(400, "Invalid lesson ID")
+    info = state.get("grade_map", {}).get(lid, {})
+    lessons_dir = BASE / "data/lessons"
+    lessons_root = lessons_dir.resolve()
+
+    # Use canonical filename from grade_map if available
+    canonical = info.get("filename")
+    if canonical:
+        matched = lessons_dir / canonical
+        if not matched.exists() or not matched.resolve().is_relative_to(lessons_root):
+            matched = None
+    else:
+        matched = None
+
+    # Fall back: find any matching file for this lesson
+    if not matched:
+        candidates = [
+            p for p in lessons_dir.glob("*")
+            if p.suffix.lower() in {".docx", ".pptx", ".pdf"}
+            and p.resolve().is_relative_to(lessons_root)
+            and _parse_lesson_num(p.name) == lid
+        ]
+        # Prefer docx > pptx > pdf, then largest file
+        ext_rank = {".docx": 0, ".pptx": 1, ".pdf": 2}
+        candidates.sort(key=lambda p: (ext_rank.get(p.suffix.lower(), 9), -p.stat().st_size))
+        matched = candidates[0] if candidates else None
+
+    if not matched:
+        raise HTTPException(404, f"Lesson {lid} not found")
+    try:
+        text = _extract_lesson_text(matched)
+        html_content = _extract_lesson_html(matched)
+    except Exception as e:
+        raise HTTPException(500, f"Could not extract: {e}")
+    return {
+        "id": lid,
+        "title": info.get("title", matched.stem),
+        "grades": info.get("grades", []),
+        "filename": matched.name,
+        "text": text,
+        "html": html_content,
+    }
