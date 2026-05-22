@@ -309,13 +309,38 @@
       .cursor { animation:none; opacity:1; }
       .lesson-card, .gnav-btn { transition:none; }
     }
+
+    /* ── WCAG 2.2 ── */
+    .skip-nav {
+      position: absolute; left: 8px; top: -100%;
+      background: var(--orange); color: #fff;
+      padding: 8px 18px; border-radius: 0 0 8px 8px;
+      z-index: 9999; text-decoration: none; font-weight: 700;
+      font-size: 0.9rem; white-space: nowrap;
+    }
+    .skip-nav:focus { top: 0; outline: 3px solid #fff; outline-offset: 2px; }
+
+    /* Global focus indicator */
+    :focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; border-radius: 4px; }
+    .btn-ask:focus-visible,
+    #send-btn:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+    #q-input:focus-visible { border-color: var(--orange); outline: 3px solid var(--orange); outline-offset: 0; }
+
+    /* WCAG 2.5.8 — minimum 24×24 px target size */
+    .gnav-btn { min-height: 36px; }
+    .btn-close { min-width: 44px; min-height: 44px; }
+
+    /* Glossary — keyboard accessible */
+    .gterm { cursor: help; }
+    .gterm:focus-visible { outline: 2px solid var(--orange); border-radius: 2px; outline-offset: 1px; }
   </style>
 </head>
 <body>
+<a class="skip-nav" href="#main-content">Skip to main content</a>
 <div id="app">
 
   <!-- SIDEBAR -->
-  <aside>
+  <aside aria-label="Lesson navigation">
     <div class="sidebar-logo">
       <div class="logo-pill">
         <h1>Ka Pilina Noʻeau</h1>
@@ -325,35 +350,35 @@
     <div class="sidebar-section">
       <div class="section-label">Overview</div>
       <div class="stat-item">
-        <div class="stat-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div>
+        <div class="stat-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div>
         <div><div class="stat-label">Lessons</div><div class="stat-value">9</div></div>
       </div>
       <div class="stat-item">
-        <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+        <div class="stat-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
         <div><div class="stat-label">Indexed chunks</div><div class="stat-value" id="chunk-count">—</div></div>
       </div>
     </div>
     <div class="sidebar-section grow">
       <div class="section-label">Filter by Grade</div>
       <div class="grade-nav" id="grade-nav">
-        <button class="gnav-btn active" data-grade="all">All Grades <span class="gc">9</span></button>
-        <button class="gnav-btn" data-grade="K">Kindergarten <span class="gc">0</span></button>
-        <button class="gnav-btn" data-grade="1">Grade 1 <span class="gc">0</span></button>
-        <button class="gnav-btn" data-grade="2">Grade 2 <span class="gc">0</span></button>
-        <button class="gnav-btn" data-grade="3">Grade 3 <span class="gc">0</span></button>
-        <button class="gnav-btn" data-grade="4">Grade 4 <span class="gc">9</span></button>
-        <button class="gnav-btn" data-grade="5">Grade 5 <span class="gc">9</span></button>
-        <button class="gnav-btn" data-grade="6">Grade 6 <span class="gc">0</span></button>
+        <button class="gnav-btn active" data-grade="all" aria-pressed="true">All Grades <span class="gc" aria-label="9 lessons">9</span></button>
+        <button class="gnav-btn" data-grade="K" aria-pressed="false">Kindergarten <span class="gc" aria-label="0 lessons">0</span></button>
+        <button class="gnav-btn" data-grade="1" aria-pressed="false">Grade 1 <span class="gc" aria-label="0 lessons">0</span></button>
+        <button class="gnav-btn" data-grade="2" aria-pressed="false">Grade 2 <span class="gc" aria-label="0 lessons">0</span></button>
+        <button class="gnav-btn" data-grade="3" aria-pressed="false">Grade 3 <span class="gc" aria-label="0 lessons">0</span></button>
+        <button class="gnav-btn" data-grade="4" aria-pressed="false">Grade 4 <span class="gc" aria-label="9 lessons">9</span></button>
+        <button class="gnav-btn" data-grade="5" aria-pressed="false">Grade 5 <span class="gc" aria-label="9 lessons">9</span></button>
+        <button class="gnav-btn" data-grade="6" aria-pressed="false">Grade 6 <span class="gc" aria-label="0 lessons">0</span></button>
       </div>
     </div>
-    <div class="health-row">
-      <div class="hdot" id="hdot"></div>
+    <div class="health-row" role="status" aria-live="polite" aria-label="Server status">
+      <div class="hdot" id="hdot" aria-hidden="true"></div>
       <span id="hlabel">checking&hellip;</span>
     </div>
   </aside>
 
   <!-- MAIN LESSON PANEL -->
-  <main>
+  <main id="main-content" aria-label="Lesson library">
     <div class="main-header">
       <h2 id="main-title">All Lessons</h2>
       <span class="lcount" id="lcount">9 lessons</span>
@@ -362,15 +387,15 @@
   </main>
 
   <!-- CHAT PANEL -->
-  <div class="chat-panel">
+  <section class="chat-panel" aria-label="Chat with Ka Pilina">
     <div class="chat-header">
       <h2>Ask Ka Pilina</h2>
       <p>Click a lesson to view it, or ask anything</p>
     </div>
     <div class="offline-banner" id="offline-banner">Cannot reach AI server.</div>
-    <div class="chat-messages" id="chat-messages">
+    <div class="chat-messages" id="chat-messages" aria-live="polite" aria-atomic="false" aria-label="Conversation">
       <div class="chat-hint" id="chat-hint">
-        <p class="hi">E aloha k&#257;kou!</p>
+        <p class="hi" lang="haw">E aloha k&#257;kou!</p>
         <p>Click any lesson to read it, or type a question below.</p>
       </div>
     </div>
@@ -378,22 +403,23 @@
       <div class="input-row">
         <textarea id="q-input" rows="1"
           placeholder="Ask about a lesson or Hawaiian concept&hellip;"
-          aria-label="Your question" maxlength="500"></textarea>
-        <button id="send-btn" aria-label="Send" disabled>
+          aria-label="Your question" aria-describedby="input-hint-text" maxlength="500"></textarea>
+        <button id="send-btn" aria-label="Send message" disabled>
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true" focusable="false">
             <line x1="22" y1="2" x2="11" y2="13"/>
             <polygon points="22 2 15 22 11 13 2 9 22 2"/>
           </svg>
         </button>
       </div>
-      <p class="input-hint">Enter to send &middot; Shift+Enter for new line</p>
+      <p class="input-hint" id="input-hint-text">Enter to send &middot; Shift+Enter for new line</p>
     </div>
-  </div>
+  </section>
 </div>
 
 <!-- LESSON VIEWER MODAL -->
-<div class="modal-backdrop" id="modal" role="dialog" aria-modal="true">
+<div class="modal-backdrop" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
   <div class="modal-box">
     <div class="modal-head">
       <div class="modal-head-left">
@@ -464,8 +490,11 @@ checkHealth();
 /* grade nav */
 document.querySelectorAll('.gnav-btn').forEach(btn=>{
   btn.addEventListener('click',()=>{
-    document.querySelectorAll('.gnav-btn').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active'); grade=btn.dataset.grade; renderLessons();
+    document.querySelectorAll('.gnav-btn').forEach(b=>{
+      b.classList.remove('active'); b.setAttribute('aria-pressed','false');
+    });
+    btn.classList.add('active'); btn.setAttribute('aria-pressed','true');
+    grade=btn.dataset.grade; renderLessons();
     const t=document.getElementById('main-title');
     t.textContent=grade==='all'?'All Lessons':(grade==='K'?'Kindergarten':'Grade '+grade);
   });
@@ -478,26 +507,51 @@ function renderLessons(){
   if(countEl) countEl.textContent=filtered.length+' lesson'+(filtered.length!==1?'s':'');
   if(!filtered.length){ grid.innerHTML='<p class="no-lessons">No lessons for this grade yet.</p>'; return; }
   grid.innerHTML=filtered.map(l=>`
-    <button class="lesson-card" data-id="${esc(l.id)}" data-title="${esc(l.title)}">
-      <span class="lc-arrow">&rarr;</span>
-      <div class="lc-id">${esc(l.id)}</div>
+    <button class="lesson-card" data-id="${esc(l.id)}" data-title="${esc(l.title)}"
+      aria-label="Open lesson ${esc(l.id)}: ${esc(l.title)}, Grade ${l.grades.join(', ')}">
+      <span class="lc-arrow" aria-hidden="true">&rarr;</span>
+      <div class="lc-id" aria-hidden="true">${esc(l.id)}</div>
       <div class="lc-title">${esc(l.title)}</div>
       <div class="lc-grades">Grade ${l.grades.join(', ')}</div>
     </button>`).join('');
   grid.querySelectorAll('.lesson-card').forEach(card=>{
-    card.addEventListener('click',()=>openLesson(card.dataset.id, card.dataset.title));
+    card.addEventListener('click',()=>openLesson(card.dataset.id, card.dataset.title, card));
   });
 }
 renderLessons();
 
 /* lesson viewer modal */
-async function openLesson(id, title){
+let _modalOpener = null;
+const FOCUSABLE_SEL = 'button:not([disabled]), [href], input, textarea, [tabindex]:not([tabindex="-1"])';
+
+function closeModal(){
+  document.getElementById('modal').classList.remove('open');
+  if(_modalOpener){ _modalOpener.focus(); _modalOpener=null; }
+}
+
+document.getElementById('modal').addEventListener('keydown', e=>{
+  if(e.key==='Escape'){ closeModal(); return; }
+  if(e.key!=='Tab') return;
+  const box = document.getElementById('modal');
+  const focusable = [...box.querySelectorAll(FOCUSABLE_SEL)];
+  if(!focusable.length) return;
+  const first=focusable[0], last=focusable[focusable.length-1];
+  if(e.shiftKey){ if(document.activeElement===first){ e.preventDefault(); last.focus(); } }
+  else { if(document.activeElement===last){ e.preventDefault(); first.focus(); } }
+});
+
+async function openLesson(id, title, opener){
+  _modalOpener = opener || document.activeElement;
   currentLesson={id,title};
   document.getElementById('modal-id').textContent=id;
   document.getElementById('modal-title').textContent=title;
   document.getElementById('modal-grades').textContent='';
   document.getElementById('modal-body').innerHTML='<span class="modal-loading">Loading…</span>';
   document.getElementById('modal').classList.add('open');
+  requestAnimationFrame(()=>{
+    const first=document.getElementById('modal').querySelector(FOCUSABLE_SEL);
+    if(first) first.focus();
+  });
   try {
     const r=await fetch(API+'/lesson/'+encodeURIComponent(id));
     if(!r.ok) throw new Error('HTTP '+r.status);
@@ -508,8 +562,8 @@ async function openLesson(id, title){
     document.getElementById('modal-body').innerHTML='<span style="color:var(--red)">Could not load lesson: '+esc(String(e))+'</span>';
   }
 }
-document.getElementById('btn-close').addEventListener('click',()=>document.getElementById('modal').classList.remove('open'));
-document.getElementById('modal').addEventListener('click',e=>{ if(e.target===document.getElementById('modal')) document.getElementById('modal').classList.remove('open'); });
+document.getElementById('btn-close').addEventListener('click', closeModal);
+document.getElementById('modal').addEventListener('click',e=>{ if(e.target===document.getElementById('modal')) closeModal(); });
 document.getElementById('btn-ask').addEventListener('click',()=>{
   if(!currentLesson) return;
   document.getElementById('modal').classList.remove('open');
@@ -582,21 +636,31 @@ function applyGlossary(bubble, hits) {
     let last = 0;
     for (const m of deduped) {
       if (m.start > last) frag.appendChild(document.createTextNode(text.slice(last, m.start)));
+      const tipId = 'gterm-' + Math.random().toString(36).slice(2,8);
       const span = document.createElement('span');
       span.className = 'gterm';
       span.textContent = m.match;
+      span.tabIndex = 0;
+      span.setAttribute('role', 'button');
+      span.setAttribute('aria-describedby', tipId);
       const tip = document.createElement('span');
       tip.className = 'tip';
+      tip.id = tipId;
+      tip.setAttribute('role', 'tooltip');
       tip.textContent = m.definition;
       span.appendChild(tip);
-      span.addEventListener('mouseenter', () => {
+      const showTip = () => {
         tip.style.display = 'block';
         const r = span.getBoundingClientRect();
         tip.style.top = (r.top - tip.offsetHeight - 8) + 'px';
         const left = Math.min(r.left, window.innerWidth - 228);
         tip.style.left = Math.max(8, left) + 'px';
-      });
-      span.addEventListener('mouseleave', () => { tip.style.display = 'none'; });
+      };
+      const hideTip = () => { tip.style.display = 'none'; };
+      span.addEventListener('mouseenter', showTip);
+      span.addEventListener('mouseleave', hideTip);
+      span.addEventListener('focus', showTip);
+      span.addEventListener('blur', hideTip);
       frag.appendChild(span);
       last = m.end;
     }
