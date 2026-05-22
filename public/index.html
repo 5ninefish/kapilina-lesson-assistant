@@ -259,12 +259,12 @@
 
     .gterm { border-bottom:1px dotted var(--orange); color:var(--orange); cursor:help; position:relative; }
     .gterm .tip {
-      display:none; position:absolute; bottom:calc(100% + 5px); left:0;
-      background:var(--slate); color:#fff; font-size:0.74rem; line-height:1.4;
-      padding:5px 9px; border-radius:6px; width:max-content; max-width:220px;
-      z-index:30; white-space:normal; pointer-events:none;
+      display:none; position:fixed; background:var(--slate); color:#fff;
+      font-size:0.74rem; line-height:1.4; padding:5px 9px; border-radius:6px;
+      width:max-content; max-width:220px; z-index:30; white-space:normal;
+      pointer-events:none;
     }
-    .gterm:hover .tip { display:block; }
+    .gterm:hover .tip { display:block; } /* positioning handled by JS */
 
     .sources { margin-top:5px; display:flex; flex-wrap:wrap; gap:4px; }
     .src-chip {
@@ -589,6 +589,14 @@ function applyGlossary(bubble, hits) {
       tip.className = 'tip';
       tip.textContent = m.definition;
       span.appendChild(tip);
+      span.addEventListener('mouseenter', () => {
+        tip.style.display = 'block';
+        const r = span.getBoundingClientRect();
+        tip.style.top = (r.top - tip.offsetHeight - 8) + 'px';
+        const left = Math.min(r.left, window.innerWidth - 228);
+        tip.style.left = Math.max(8, left) + 'px';
+      });
+      span.addEventListener('mouseleave', () => { tip.style.display = 'none'; });
       frag.appendChild(span);
       last = m.end;
     }
