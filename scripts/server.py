@@ -83,7 +83,7 @@ app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://kapilinanoeau.org"],
+    allow_origins=["https://kapilinanoeau.org", "https://kapilina-lesson-assistant.pages.dev"],
     allow_origin_regex=r"http://localhost:\d+",
     allow_methods=["GET", "POST"],
     allow_headers=["Content-Type"],
