@@ -70,6 +70,9 @@ def extract_pdf(path: Path) -> str:
 
 
 def parse_lesson_num(name: str) -> str | None:
+    stem = Path(name).stem
+    if "__" in stem:
+        return stem.split("__", 1)[0]
     m = re.match(r"(L\d+)", name, re.IGNORECASE)
     return m.group(1).upper() if m else None
 
@@ -131,6 +134,8 @@ def main():
                 "lesson": lesson_num or "unknown",
                 "grades": grades,
                 "title": title,
+                "status": info.get("status", "ready"),
+                "band": info.get("band", ""),
                 "chunk_idx": i,
             })
 

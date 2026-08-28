@@ -362,6 +362,7 @@
       <div class="section-label">Filter by Grade</div>
       <div class="grade-nav" id="grade-nav">
         <button class="gnav-btn active" data-grade="all" aria-pressed="true">All Grades <span class="gc" aria-label="9 lessons">9</span></button>
+        <button class="gnav-btn" data-grade="PreK" aria-pressed="false">PreK <span class="gc" aria-label="0 lessons">0</span></button>
         <button class="gnav-btn" data-grade="K" aria-pressed="false">Kindergarten <span class="gc" aria-label="0 lessons">0</span></button>
         <button class="gnav-btn" data-grade="1" aria-pressed="false">Grade 1 <span class="gc" aria-label="0 lessons">0</span></button>
         <button class="gnav-btn" data-grade="2" aria-pressed="false">Grade 2 <span class="gc" aria-label="0 lessons">0</span></button>
@@ -453,7 +454,7 @@ let history = [];
 let streaming = false;
 let currentLesson = null;
 
-const LESSONS = [
+let LESSONS = [
   {id:'L1', title:'Hale / Angles',               grades:['4','5']},
   {id:'L2', title:'Loko Iʻa / Fish Fractions', grades:['4','5']},
   {id:'L3', title:'Kiʻi Pōhaku / Cryptography', grades:['4','5']},
@@ -464,6 +465,26 @@ const LESSONS = [
   {id:'L8', title:'Wayfinding / Battleship',      grades:['4','5']},
   {id:'L9', title:'Ahupuaʻa / Kapu',         grades:['4','5']},
 ];
+
+function gradeCount(g){
+  if(g==='all') return LESSONS.length;
+  return LESSONS.filter(l=>l.grades.includes(g)).length;
+}
+function updateGradeCounts(){
+  document.querySelectorAll('.gnav-btn').forEach(btn=>{
+    const g=btn.dataset.grade;
+    const n=gradeCount(g);
+    const gc=btn.querySelector('.gc');
+    if(gc){ gc.textContent=n; gc.setAttribute('aria-label', n+' lessons'); }
+  });
+}
+fetch(API+'/lessons').then(r=>r.json()).then(d=>{
+  if(d.lessons && d.lessons.length){
+    LESSONS=d.lessons.map(l=>({id:l.id, title:l.title, grades:l.grades||[], status:l.status||'ready'}));
+    updateGradeCounts();
+    renderLessons();
+  }
+}).catch(()=>{});
 
 /* helpers */
 function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -496,7 +517,7 @@ document.querySelectorAll('.gnav-btn').forEach(btn=>{
     btn.classList.add('active'); btn.setAttribute('aria-pressed','true');
     grade=btn.dataset.grade; renderLessons();
     const t=document.getElementById('main-title');
-    t.textContent=grade==='all'?'All Lessons':(grade==='K'?'Kindergarten':'Grade '+grade);
+    t.textContent=grade==='all'?'All Lessons':(grade==='PreK'?'PreK':grade==='K'?'Kindergarten':'Grade '+grade);
   });
 });
 

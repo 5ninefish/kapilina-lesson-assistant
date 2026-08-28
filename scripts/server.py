@@ -28,7 +28,7 @@ GLOSSARY_PATH = BASE / "data/glossary.json"
 GRADE_MAP_PATH = BASE / "data/grade_map.json"
 EMBED_MODEL = "intfloat/multilingual-e5-large"
 OLLAMA_HOST = "http://localhost:11434"
-OLLAMA_MODEL = "llama3:8b"
+OLLAMA_MODEL = "llama3:latest"  # PF tag; Llama 3 8B (llama3:8b is not installed)
 TOP_K = 5
 SIM_THRESHOLD = 0.50
 MAX_CONTEXT_CHARS = 3000 * 4
@@ -47,7 +47,7 @@ Always end your response by citing the lesson(s) you drew from, e.g.: "Source: L
 state: dict = {}
 limiter = Limiter(key_func=get_remote_address)
 
-GradeValue = Literal["all", "K", "1", "2", "3", "4", "5", "6"]
+GradeValue = Literal["all", "PreK", "K", "1", "2", "3", "4", "5", "6"]
 
 
 @asynccontextmanager
@@ -100,6 +100,26 @@ class QueryRequest(BaseModel):
     grade: GradeValue = "all"
     subject: str | None = None
     messages: Annotated[list[Message], Field(max_length=50)] = []
+
+
+@app.get("/lessons")
+async def list_lessons():
+    items = []
+    for lid, info in (state.get("grade_map") or {}).items():
+        if _re.match(r"^L\d+$", lid):
+            continue
+        items.append(
+            {
+                "id": lid,
+                "title": info.get("title", lid),
+                "grades": info.get("grades", []),
+                "status": info.get("status", "ready"),
+                "band": info.get("band", ""),
+            }
+        )
+    band_order = {"PreK": 0, "K": 1, "1": 2, "2-3": 3, "4-5": 4}
+    items.sort(key=lambda x: (band_order.get(x.get("band") or "", 9), x["title"].lower()))
+    return {"lessons": items}
 
 
 @app.get("/health")
@@ -212,8 +232,18 @@ import re as _re
 
 
 def _parse_lesson_num(name: str) -> str | None:
+    from pathlib import Path as _P
+    stem = _P(name).stem
+    if "__" in stem:
+        return stem.split("__", 1)[0]
     m = _re.match(r"(L\d+)", name, _re.IGNORECASE)
     return m.group(1).upper() if m else None
+
+
+def _norm_lesson_id(lesson_id: str) -> str:
+    if _re.match(r"^L\d+$", lesson_id, _re.I):
+        return lesson_id.upper()
+    return lesson_id
 
 
 def _extract_lesson_text(path):
@@ -337,8 +367,8 @@ def _extract_lesson_html(path):
 @app.get("/lesson/{lesson_id}")
 async def get_lesson(lesson_id: str):
     from fastapi import HTTPException
-    lid = lesson_id.upper()
-    if not _re.match(r"^L\d+$", lid):
+    lid = _norm_lesson_id(lesson_id)
+    if not _re.match(r"^(L\d+|[A-Za-z0-9][A-Za-z0-9._-]{0,80})$", lid):
         raise HTTPException(400, "Invalid lesson ID")
     info = state.get("grade_map", {}).get(lid, {})
     lessons_dir = BASE / "data/lessons"

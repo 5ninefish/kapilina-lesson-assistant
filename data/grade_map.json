@@ -1,11 +1,950 @@
 {
-  "L1": {"grades": ["4", "5"], "title": "Hale / Angles", "filename": "L1_A Hale Made of Angles & Hale Angles.docx"},
-  "L2": {"grades": ["4", "5"], "title": "Loko Iʻa / Fish Fractions", "filename": "L2_Local Loko I'a Lifestyle & Loko I'a Launchers.docx"},
-  "L3": {"grades": ["4", "5"], "title": "Kiʻi Pōhaku / Cryptography", "filename": "L3_The Mystery of Hawaiian Ki‘i Pōhaku & Hidden Messages_ Cryptography.docx"},
-  "L4": {"grades": ["4", "5"], "title": "Kimona / Dash Robot", "filename": "L4_Kimona Says Program & Dash Says Aloha.docx"},
-  "L5": {"grades": ["4", "5"], "title": "Lauhala / Artist", "filename": "L5_ Lauhala Craftsmen & The Artist.docx"},
-  "L6": {"grades": ["4", "5"], "title": "Quilt / Binary", "filename": "L6_Reflecting on Hawaiian Quilt Symmetry & Creating Hawaiian Quilt Patterns with Binary.docx"},
-  "L7": {"grades": ["4", "5"], "title": "ʻAuwai / Measurements", "filename": "L7_Hanawai & Dash-ing Through Auwai.docx"},
-  "L8": {"grades": ["4", "5"], "title": "Wayfinding / Battleship", "filename": "L8_Wayfinding & Coordinate Battleship.docx"},
-  "L9": {"grades": ["4", "5"], "title": "Ahupuaʻa / Kapu", "filename": "L9_Ahupua‘a and Kapu Systems of Order & Lei Order of Operations.docx"}
+  "L1": {
+    "grades": [
+      "4",
+      "5"
+    ],
+    "title": "Hale / Angles",
+    "filename": "L1_A Hale Made of Angles & Hale Angles.docx"
+  },
+  "L2": {
+    "grades": [
+      "4",
+      "5"
+    ],
+    "title": "Loko Iʻa / Fish Fractions",
+    "filename": "L2_Local Loko I'a Lifestyle & Loko I'a Launchers.docx"
+  },
+  "L3": {
+    "grades": [
+      "4",
+      "5"
+    ],
+    "title": "Kiʻi Pōhaku / Cryptography",
+    "filename": "L3_The Mystery of Hawaiian Ki‘i Pōhaku & Hidden Messages_ Cryptography.docx"
+  },
+  "L4": {
+    "grades": [
+      "4",
+      "5"
+    ],
+    "title": "Kimona / Dash Robot",
+    "filename": "L4_Kimona Says Program & Dash Says Aloha.docx"
+  },
+  "L5": {
+    "grades": [
+      "4",
+      "5"
+    ],
+    "title": "Lauhala / Artist",
+    "filename": "L5_ Lauhala Craftsmen & The Artist.docx"
+  },
+  "L6": {
+    "grades": [
+      "4",
+      "5"
+    ],
+    "title": "Quilt / Binary",
+    "filename": "L6_Reflecting on Hawaiian Quilt Symmetry & Creating Hawaiian Quilt Patterns with Binary.docx"
+  },
+  "L7": {
+    "grades": [
+      "4",
+      "5"
+    ],
+    "title": "ʻAuwai / Measurements",
+    "filename": "L7_Hanawai & Dash-ing Through Auwai.docx"
+  },
+  "L8": {
+    "grades": [
+      "4",
+      "5"
+    ],
+    "title": "Wayfinding / Battleship",
+    "filename": "L8_Wayfinding & Coordinate Battleship.docx"
+  },
+  "L9": {
+    "grades": [
+      "4",
+      "5"
+    ],
+    "title": "Ahupuaʻa / Kapu",
+    "filename": "L9_Ahupua‘a and Kapu Systems of Order & Lei Order of Operations.docx"
+  },
+  "1-dividing-ohe-kapala-shaping-your-kapala-design": {
+    "grades": [
+      "1"
+    ],
+    "title": "Dividing Ohe Kapala & Shaping Your Kapala Design",
+    "filename": "1-dividing-ohe-kapala-shaping-your-kapala-design__extended.docx",
+    "status": "ready",
+    "band": "1",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "1-exploring-laau-parts-comparing-kalo-parts": {
+    "grades": [
+      "1"
+    ],
+    "title": "Exploring Laʻau Parts & Comparing Kalo Parts",
+    "filename": "1-exploring-laau-parts-comparing-kalo-parts__extended.docx",
+    "status": "ready",
+    "band": "1",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "1-fishy-graphs-ia-ai": {
+    "grades": [
+      "1"
+    ],
+    "title": "Fishy Graphs & Iʻa AI",
+    "filename": "1-fishy-graphs-ia-ai__extended.docx",
+    "status": "ready",
+    "band": "1",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "1-five-yellow-meli-bee-in-danger-of-beeing-extinct": {
+    "grades": [
+      "1"
+    ],
+    "title": "Five Yellow Meli Bee & In Danger of Beeing Extinct",
+    "filename": "1-five-yellow-meli-bee-in-danger-of-beeing-extinct__extended.docx",
+    "status": "ready",
+    "band": "1",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "1-hale-3d-composite-shapes-three-little-puaa-3d-hale-challenge": {
+    "grades": [
+      "1"
+    ],
+    "title": "Hale 3D Composite Shapes & Three Little Puaʻa 3D Hale Challenge",
+    "filename": "1-hale-3d-composite-shapes-three-little-puaa-3d-hale-challenge__extended.docx",
+    "status": "ready",
+    "band": "1",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "1-help-me-harvest-kalo-iole-collects-kalo": {
+    "grades": [
+      "1"
+    ],
+    "title": "Help Me Harvest Kalo & Iole Collects Kalo",
+    "filename": "1-help-me-harvest-kalo-iole-collects-kalo__extended.docx",
+    "status": "ready",
+    "band": "1",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "1-hoolohe-hahai-hunts-for-food": {
+    "grades": [
+      "1"
+    ],
+    "title": "Hoʻolohe & Hahai Hunts for Food",
+    "filename": "1-hoolohe-hahai-hunts-for-food__extended.docx",
+    "status": "ready",
+    "band": "1",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "1-illuminating-iolani-palace-palace-objects-seek-and-find": {
+    "grades": [
+      "1"
+    ],
+    "title": "Illuminating Iolani Palace & Palace Objects Seek and Find",
+    "filename": "1-illuminating-iolani-palace-palace-objects-seek-and-find__extended.docx",
+    "status": "ready",
+    "band": "1",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "1-its-maui-time-capturing-time": {
+    "grades": [
+      "1"
+    ],
+    "title": "It's Maui Time & Capturing Time",
+    "filename": "1-its-maui-time-capturing-time__extended.docx",
+    "status": "ready",
+    "band": "1",
+    "editions": [
+      "extended"
+    ]
+  },
+  "1-kapili-with-shapes-carving-shapes-to-make-kii-pohaku": {
+    "grades": [
+      "1"
+    ],
+    "title": "Kapili with Shapes & Carving Shapes to Make Kiʻi Pohaku",
+    "filename": "1-kapili-with-shapes-carving-shapes-to-make-kii-pohaku__extended.docx",
+    "status": "ready",
+    "band": "1",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "1-reflecting-the-light-anuenue-addition": {
+    "grades": [
+      "1"
+    ],
+    "title": "Reflecting the Light & Anuenue Addition",
+    "filename": "1-reflecting-the-light-anuenue-addition__extended.docx",
+    "status": "ready",
+    "band": "1",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "1-water-cycle-mele-watershed-precipitation-modeling": {
+    "grades": [
+      "1"
+    ],
+    "title": "Water Cycle Mele & Watershed Precipitation Modeling",
+    "filename": "1-water-cycle-mele-watershed-precipitation-modeling__extended.docx",
+    "status": "ready",
+    "band": "1",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "2-3-array-to-play-konane-lauhala-arrays": {
+    "grades": [
+      "2",
+      "3"
+    ],
+    "title": "Array to Play Konane & Lauhala Arrays",
+    "filename": "2-3-array-to-play-konane-lauhala-arrays__extended.docx",
+    "status": "ready",
+    "band": "2-3",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "2-3-changing-the-game-of-ulu-maika-dash-bowling": {
+    "grades": [
+      "2",
+      "3"
+    ],
+    "title": "Changing the Game of Ulu Maika & Dash Bowling",
+    "filename": "2-3-changing-the-game-of-ulu-maika-dash-bowling__extended.docx",
+    "status": "ready",
+    "band": "2-3",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "2-3-dancing-codes-step-by-step-hula-programming": {
+    "grades": [
+      "2",
+      "3"
+    ],
+    "title": "Dancing Codes & Step by Step Hula Programming",
+    "filename": "2-3-dancing-codes-step-by-step-hula-programming__extended.docx",
+    "status": "ready",
+    "band": "2-3",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "2-3-everyday-anakahi-measure-hunt": {
+    "grades": [
+      "2",
+      "3"
+    ],
+    "title": "Everyday Anakahi & Measure Hunt",
+    "filename": "2-3-everyday-anakahi-measure-hunt__extended.docx",
+    "status": "ready",
+    "band": "2-3",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "2-3-getting-to-know-limu-limu-farming": {
+    "grades": [
+      "2",
+      "3"
+    ],
+    "title": "Getting to Know Limu & Limu Farming",
+    "filename": "2-3-getting-to-know-limu-limu-farming__extended.docx",
+    "status": "ready",
+    "band": "2-3",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "2-3-harvesting-crops-with-loops-coding-crops": {
+    "grades": [
+      "2",
+      "3"
+    ],
+    "title": "Harvesting Crops with Loops & Coding Crops",
+    "filename": "2-3-harvesting-crops-with-loops-coding-crops__extended.docx",
+    "status": "ready",
+    "band": "2-3",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "2-3-ka-la-and-ke-ahi-lights-out": {
+    "grades": [
+      "2",
+      "3"
+    ],
+    "title": "Ka La and Ke Ahi & Lights Out",
+    "filename": "2-3-ka-la-and-ke-ahi-lights-out__extended.docx",
+    "status": "ready",
+    "band": "2-3",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "2-3-puzzling-climate-zones-planting-terrariums": {
+    "grades": [
+      "2",
+      "3"
+    ],
+    "title": "Puzzling Climate Zones & Planting Terrariums",
+    "filename": "2-3-puzzling-climate-zones-planting-terrariums__extended.docx",
+    "status": "ready",
+    "band": "2-3",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "2-3-saving-the-birds": {
+    "grades": [
+      "2",
+      "3"
+    ],
+    "title": "Saving the Birds",
+    "filename": "2-3-saving-the-birds__extended.pdf",
+    "status": "embargo",
+    "band": "2-3",
+    "editions": [
+      "extended"
+    ]
+  },
+  "2-3-the-kino-lau-of-pele-balancing-lava": {
+    "grades": [
+      "2",
+      "3"
+    ],
+    "title": "The Kino Lau of Pele & Balancing Lava",
+    "filename": "2-3-the-kino-lau-of-pele-balancing-lava__extended.docx",
+    "status": "ready",
+    "band": "2-3",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "2-3-timekeepers-what-time-is-it": {
+    "grades": [
+      "2",
+      "3"
+    ],
+    "title": "Timekeepers & What Time Is It",
+    "filename": "2-3-timekeepers-what-time-is-it__extended.docx",
+    "status": "ready",
+    "band": "2-3",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "2-3-tools-and-technology-over-time-dash-programming": {
+    "grades": [
+      "2",
+      "3"
+    ],
+    "title": "Tools and Technology Over Time & Dash Programming",
+    "filename": "2-3-tools-and-technology-over-time-dash-programming__extended.docx",
+    "status": "ready",
+    "band": "2-3",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "2-3-trade-wins-that-makes-cents": {
+    "grades": [
+      "2",
+      "3"
+    ],
+    "title": "Trade Wins & That Makes Cents",
+    "filename": "2-3-trade-wins-that-makes-cents__extended.docx",
+    "status": "ready",
+    "band": "2-3",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "4-5-a-hale-made-of-angles-hale-angles": {
+    "grades": [
+      "4",
+      "5"
+    ],
+    "title": "A Hale Made of Angles & Hale Angles",
+    "filename": "4-5-a-hale-made-of-angles-hale-angles__extended.docx",
+    "status": "ready",
+    "band": "4-5",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "4-5-ahupua-a-and-kapu-systems-of-order-lei-order-of-operations": {
+    "grades": [
+      "4",
+      "5"
+    ],
+    "title": "Ahupua‘a and Kapu Systems of Order & Lei Order of Operations",
+    "filename": "4-5-ahupua-a-and-kapu-systems-of-order-lei-order-of-operations__extended.docx",
+    "status": "ready",
+    "band": "4-5",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "4-5-food-chains-energy-transfer": {
+    "grades": [
+      "4",
+      "5"
+    ],
+    "title": "Food Chains & Energy Transfer",
+    "filename": "4-5-food-chains-energy-transfer__extended.pptx",
+    "status": "embargo",
+    "band": "4-5",
+    "editions": [
+      "extended"
+    ]
+  },
+  "4-5-gravity": {
+    "grades": [
+      "4",
+      "5"
+    ],
+    "title": "Gravity",
+    "filename": "4-5-gravity__extended.docx",
+    "status": "embargo",
+    "band": "4-5",
+    "editions": [
+      "extended"
+    ]
+  },
+  "4-5-hanawai-dashing-through-auwai": {
+    "grades": [
+      "4",
+      "5"
+    ],
+    "title": "Hanawai & Dashing Through Auwai",
+    "filename": "4-5-hanawai-dashing-through-auwai__extended.docx",
+    "status": "ready",
+    "band": "4-5",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "4-5-kimona-says-program-dash-says-aloha": {
+    "grades": [
+      "4",
+      "5"
+    ],
+    "title": "Kimona Says Program & Dash Says ALOHA",
+    "filename": "4-5-kimona-says-program-dash-says-aloha__extended.docx",
+    "status": "ready",
+    "band": "4-5",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "4-5-lauhala-craftsmen-the-artist": {
+    "grades": [
+      "4",
+      "5"
+    ],
+    "title": "Lauhala Craftsmen & the Artist",
+    "filename": "4-5-lauhala-craftsmen-the-artist__extended.docx",
+    "status": "ready",
+    "band": "4-5",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "4-5-limu-hydropincs": {
+    "grades": [
+      "4",
+      "5"
+    ],
+    "title": "Limu & Hydropincs",
+    "filename": "4-5-limu-hydropincs__extended.pptx",
+    "status": "embargo",
+    "band": "4-5",
+    "editions": [
+      "extended"
+    ]
+  },
+  "4-5-local-loko-ia-lifestyle-loko-i-a-launchers": {
+    "grades": [
+      "4",
+      "5"
+    ],
+    "title": "Local Loko I'a Lifestyle & Loko I‘a Launchers",
+    "filename": "4-5-local-loko-ia-lifestyle-loko-i-a-launchers__extended.docx",
+    "status": "ready",
+    "band": "4-5",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "4-5-mahina-rising": {
+    "grades": [
+      "4",
+      "5"
+    ],
+    "title": "Mahina Rising",
+    "filename": "4-5-mahina-rising__extended.docx",
+    "status": "embargo",
+    "band": "4-5",
+    "editions": [
+      "extended"
+    ]
+  },
+  "4-5-reflecting-on-hawaiian-quilt-symmetry-hawaiian-quilt-patterns-with-b": {
+    "grades": [
+      "4",
+      "5"
+    ],
+    "title": "Reflecting on Hawaiian Quilt Symmetry & Hawaiian Quilt Patterns with Binary",
+    "filename": "4-5-reflecting-on-hawaiian-quilt-symmetry-hawaiian-quilt-patterns-with-b__extended.docx",
+    "status": "ready",
+    "band": "4-5",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "4-5-restoring-the-muliwai-with-genki-balls": {
+    "grades": [
+      "4",
+      "5"
+    ],
+    "title": "Restoring the Muliwai with Genki Balls",
+    "filename": "4-5-restoring-the-muliwai-with-genki-balls__extended.docx",
+    "status": "embargo",
+    "band": "4-5",
+    "editions": [
+      "extended"
+    ]
+  },
+  "4-5-the-mystery-of-hawaiian-ki-i-pohaku-hidden-messages-cryptography": {
+    "grades": [
+      "4",
+      "5"
+    ],
+    "title": "The Mystery of Hawaiian Ki‘i Pōhaku & Hidden Messages: Cryptography",
+    "filename": "4-5-the-mystery-of-hawaiian-ki-i-pohaku-hidden-messages-cryptography__extended.docx",
+    "status": "ready",
+    "band": "4-5",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "4-5-tsunami-hawai-i-tsunami-wave-tank-fractions": {
+    "grades": [
+      "4",
+      "5"
+    ],
+    "title": "Tsunami Hawai‘i & Tsunami Wave Tank Fractions",
+    "filename": "4-5-tsunami-hawai-i-tsunami-wave-tank-fractions__extended.docx",
+    "status": "ready",
+    "band": "4-5",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "4-5-wai-kai-estuaries-wai-so-salty": {
+    "grades": [
+      "4",
+      "5"
+    ],
+    "title": "Wai Kai Estuaries & Wai So Salty",
+    "filename": "4-5-wai-kai-estuaries-wai-so-salty__extended.docx",
+    "status": "ready",
+    "band": "4-5",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "4-5-wayfinding-coordinate-battleship": {
+    "grades": [
+      "4",
+      "5"
+    ],
+    "title": "Wayfinding & Coordinate Battleship",
+    "filename": "4-5-wayfinding-coordinate-battleship__extended.docx",
+    "status": "ready",
+    "band": "4-5",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "4-5-wa-a-voyaging-making-weight": {
+    "grades": [
+      "4",
+      "5"
+    ],
+    "title": "Wa‘a Voyaging & Making Weight",
+    "filename": "4-5-wa-a-voyaging-making-weight__extended.docx",
+    "status": "ready",
+    "band": "4-5",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "4-5-wind-and-kites": {
+    "grades": [
+      "4",
+      "5"
+    ],
+    "title": "Wind and Kites",
+    "filename": "4-5-wind-and-kites__extended.docx",
+    "status": "embargo",
+    "band": "4-5",
+    "editions": [
+      "extended"
+    ]
+  },
+  "k-ahupuaa-community-resources-ahupuaa-natural-resources-diagram": {
+    "grades": [
+      "K"
+    ],
+    "title": "Ahupuaa Community Resources & Ahupuaʻa Natural Resources Diagram",
+    "filename": "k-ahupuaa-community-resources-ahupuaa-natural-resources-diagram__extended.docx",
+    "status": "ready",
+    "band": "K",
+    "editions": [
+      "extended"
+    ]
+  },
+  "k-fishy-traits-ia-ai": {
+    "grades": [
+      "K"
+    ],
+    "title": "Fishy Traits & Iʻa AI",
+    "filename": "k-fishy-traits-ia-ai__extended.docx",
+    "status": "ready",
+    "band": "K",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "k-five-yellow-meli-bee-in-danger-of-beeing-extinct": {
+    "grades": [
+      "K"
+    ],
+    "title": "Five Yellow Meli Bee & In Danger of Beeing Extinct",
+    "filename": "k-five-yellow-meli-bee-in-danger-of-beeing-extinct__extended.docx",
+    "status": "ready",
+    "band": "K",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "k-hale-3d-shapes-three-little-puaa-challenge": {
+    "grades": [
+      "K"
+    ],
+    "title": "Hale 3D Shapes & Three Little Puaʻa Challenge",
+    "filename": "k-hale-3d-shapes-three-little-puaa-challenge__extended.docx",
+    "status": "ready",
+    "band": "K",
+    "editions": [
+      "extended"
+    ]
+  },
+  "k-hoolohe-opeapea-echolocation": {
+    "grades": [
+      "K"
+    ],
+    "title": "Hoʻolohe & Opeapea Echolocation",
+    "filename": "k-hoolohe-opeapea-echolocation__extended.docx",
+    "status": "ready",
+    "band": "K",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "k-kapa-shapes-shaping-your-kapa-design": {
+    "grades": [
+      "K"
+    ],
+    "title": "Kapa Shapes & Shaping Your Kapa Design",
+    "filename": "k-kapa-shapes-shaping-your-kapa-design__extended.docx",
+    "status": "ready",
+    "band": "K",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "k-living-and-non-living-things-detectives-farmer-pilis-round-up": {
+    "grades": [
+      "K"
+    ],
+    "title": "Living and Non Living Things Detectives & Farmer Piliʻs Round Up",
+    "filename": "k-living-and-non-living-things-detectives-farmer-pilis-round-up__extended.docx",
+    "status": "ready",
+    "band": "K",
+    "editions": [
+      "extended"
+    ]
+  },
+  "k-local-motions-makahiki-forces": {
+    "grades": [
+      "K"
+    ],
+    "title": "Local Motions & Makahiki Forces",
+    "filename": "k-local-motions-makahiki-forces__extended.docx",
+    "status": "ready",
+    "band": "K",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "k-my-hawaiian-robot-ioles-house-maze": {
+    "grades": [
+      "K"
+    ],
+    "title": "My Hawaiian Robot & Iole's House Maze",
+    "filename": "k-my-hawaiian-robot-ioles-house-maze__extended.docx",
+    "status": "ready",
+    "band": "K",
+    "editions": [
+      "extended",
+      "pacing"
+    ]
+  },
+  "k-plant-bingo-pilina-lina-planters": {
+    "grades": [
+      "K"
+    ],
+    "title": "Plant Bingo & Pilina Lina Planters",
+    "filename": "k-plant-bingo-pilina-lina-planters__extended.docx",
+    "status": "ready",
+    "band": "K",
+    "editions": [
+      "extended"
+    ]
+  },
+  "k-searching-for-shapes-in-kii-pohaku-carving-kii-pohaku": {
+    "grades": [
+      "K"
+    ],
+    "title": "Searching for Shapes in Kiʻi Pohaku & Carving Kiʻi Pohaku",
+    "filename": "k-searching-for-shapes-in-kii-pohaku-carving-kii-pohaku__extended.docx",
+    "status": "ready",
+    "band": "K",
+    "editions": [
+      "extended"
+    ]
+  },
+  "k-water-cycle-mele-water-cycle-experiments": {
+    "grades": [
+      "K"
+    ],
+    "title": "Water Cycle Mele & Water Cycle Experiments",
+    "filename": "k-water-cycle-mele-water-cycle-experiments__extended.docx",
+    "status": "ready",
+    "band": "K",
+    "editions": [
+      "extended"
+    ]
+  },
+  "prek-hows-the-weather-in-hawaii-nei": {
+    "grades": [
+      "PreK"
+    ],
+    "title": "How's the Weather in Hawaiʻi Nei",
+    "filename": "prek-hows-the-weather-in-hawaii-nei__extended.docx",
+    "status": "ready",
+    "band": "PreK",
+    "editions": [
+      "extended"
+    ]
+  },
+  "prek-ia-categories-fishy-lesson": {
+    "grades": [
+      "PreK"
+    ],
+    "title": "Iʻa Categories (Fishy Lesson)",
+    "filename": "prek-ia-categories-fishy-lesson__extended.docx",
+    "status": "ready",
+    "band": "PreK",
+    "editions": [
+      "extended"
+    ]
+  },
+  "prek-kani-ka-pila-music-technology-lesson": {
+    "grades": [
+      "PreK"
+    ],
+    "title": "Kani Ka Pila (Music Technology Lesson)",
+    "filename": "prek-kani-ka-pila-music-technology-lesson__extended.docx",
+    "status": "ready",
+    "band": "PreK",
+    "editions": [
+      "extended"
+    ]
+  },
+  "prek-kapa-patterns": {
+    "grades": [
+      "PreK"
+    ],
+    "title": "Kapa Patterns",
+    "filename": "prek-kapa-patterns__extended.docx",
+    "status": "ready",
+    "band": "PreK",
+    "editions": [
+      "extended"
+    ]
+  },
+  "prek-keiki-and-makua-shapes-traits": {
+    "grades": [
+      "PreK"
+    ],
+    "title": "Keiki and Makua Shapes & Traits",
+    "filename": "prek-keiki-and-makua-shapes-traits__extended.docx",
+    "status": "ready",
+    "band": "PreK",
+    "editions": [
+      "extended"
+    ]
+  },
+  "prek-look-up-at-the-lewa-celestial-objects": {
+    "grades": [
+      "PreK"
+    ],
+    "title": "Look Up at the Lewa (Celestial Objects)",
+    "filename": "prek-look-up-at-the-lewa-celestial-objects__extended.docx",
+    "status": "ready",
+    "band": "PreK",
+    "editions": [
+      "extended"
+    ]
+  },
+  "prek-makahiki-motions": {
+    "grades": [
+      "PreK"
+    ],
+    "title": "Makahiki Motions",
+    "filename": "prek-makahiki-motions__extended.docx",
+    "status": "ready",
+    "band": "PreK",
+    "editions": [
+      "extended"
+    ]
+  },
+  "prek-pilikia-pests-native-nests": {
+    "grades": [
+      "PreK"
+    ],
+    "title": "Pilikia Pests & Native Nests",
+    "filename": "prek-pilikia-pests-native-nests__extended.docx",
+    "status": "ready",
+    "band": "PreK",
+    "editions": [
+      "extended"
+    ]
+  },
+  "prek-programming-iole": {
+    "grades": [
+      "PreK"
+    ],
+    "title": "Programming ʻIole",
+    "filename": "prek-programming-iole__extended.docx",
+    "status": "ready",
+    "band": "PreK",
+    "editions": [
+      "extended"
+    ]
+  },
+  "prek-resources-in-an-ahupuaa": {
+    "grades": [
+      "PreK"
+    ],
+    "title": "Resources in an Ahupuaʻa",
+    "filename": "prek-resources-in-an-ahupuaa__extended.docx",
+    "status": "ready",
+    "band": "PreK",
+    "editions": [
+      "extended"
+    ]
+  },
+  "prek-sorting-living-nonliving-things": {
+    "grades": [
+      "PreK"
+    ],
+    "title": "Sorting Living & Nonliving Things",
+    "filename": "prek-sorting-living-nonliving-things__extended.docx",
+    "status": "ready",
+    "band": "PreK",
+    "editions": [
+      "extended"
+    ]
+  },
+  "prek-the-3ps-3d-hale-challenge": {
+    "grades": [
+      "PreK"
+    ],
+    "title": "The 3P's 3D Hale Challenge",
+    "filename": "prek-the-3ps-3d-hale-challenge__extended.docx",
+    "status": "ready",
+    "band": "PreK",
+    "editions": [
+      "extended"
+    ]
+  }
 }

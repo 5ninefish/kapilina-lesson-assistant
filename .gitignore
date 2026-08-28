@@ -1,0 +1,10 @@
+.DS_Store
+data/lessons/
+data/lesson_index.json
+data/lesson_index.csv
+data/fetch_manifest.json
+data/chroma/
+venv/
+__pycache__/
+*.pyc
+logs/
