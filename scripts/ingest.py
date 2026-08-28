@@ -90,11 +90,13 @@ def main():
         metadata={"hnsw:space": "cosine"},
     )
 
+    SKIP_NAME = re.compile(r"(?i)(vocabulary check|answer sheet|answer key|rubric)")
     lessons_root = LESSONS_DIR.resolve()
     files = sorted(
         f for f in LESSONS_DIR.glob("*")
         if f.suffix.lower() in {".docx", ".pptx", ".pdf"}
         and f.resolve().is_relative_to(lessons_root)
+        and not SKIP_NAME.search(f.name)
     )
     print(f"{len(files)} lesson files found\n")
 

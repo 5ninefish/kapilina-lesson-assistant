@@ -1,0 +1,370 @@
+{
+  "ts": "2026-08-28T04:55:44.477287+00:00",
+  "n": 25,
+  "pass": 25,
+  "fail": 0,
+  "by_type": {
+    "open": {
+      "n": 8,
+      "pass": 8
+    },
+    "specific": {
+      "n": 8,
+      "pass": 8
+    },
+    "orthography": {
+      "n": 3,
+      "pass": 3
+    },
+    "refuse": {
+      "n": 3,
+      "pass": 3
+    },
+    "key-leak": {
+      "n": 3,
+      "pass": 3
+    }
+  },
+  "fails": [],
+  "rows": [
+    {
+      "id": "open-stars",
+      "type": "open",
+      "pass": true,
+      "reason": "gold lesson in sources",
+      "lessons": [
+        "4-5-wayfinding-coordinate-battleship",
+        "4-5-wind-and-kites",
+        "4-5-wayfinding-coordinate-battleship",
+        "k-ahupuaa-community-resources-ahupuaa-natural-resources-diagram",
+        "prek-look-up-at-the-lewa-celestial-objects",
+        "2-3-timekeepers-what-time-is-it",
+        "1-its-maui-time-capturing-time",
+        "L8"
+      ],
+      "answer_preview": "According to the lesson plans provided, Hawaiians navigated with the stars by observing their position in the sky. They used the constellations, including the Big Dipper, to determine their direction. The star map showed north at the top of the page, so if the Big Dipper appears upside down on the photo, it would match the orientation of the star map if they turn the photo clockwise to the right ("
+    },
+    {
+      "id": "open-measurement",
+      "type": "open",
+      "pass": true,
+      "reason": "gold lesson in sources",
+      "lessons": [
+        "2-3-everyday-anakahi-measure-hunt",
+        "2-3-everyday-anakahi-measure-hunt",
+        "4-5-hanawai-dashing-through-auwai",
+        "4-5-hanawai-dashing-through-auwai"
+      ],
+      "answer_preview": "Yes, Hawaiians had their own measurement system. They used units of measurement called \"anakahi\" which were based on different parts of the body. According to the lesson plans provided, these units included anana, muku, iwilei, haʻilima, pīʻā, and kīkoʻo. These measurements could be used to measure various objects and distances in everyday life. /  / Source: L2 Measure Hunt (Grade 2-3)"
+    },
+    {
+      "id": "open-dash",
+      "type": "open",
+      "pass": true,
+      "reason": "gold lesson in sources",
+      "lessons": [
+        "2-3-tools-and-technology-over-time-dash-programming",
+        "4-5-kimona-says-program-dash-says-aloha",
+        "2-3-tools-and-technology-over-time-dash-programming",
+        "2-3-changing-the-game-of-ulu-maika-dash-bowling",
+        "L4",
+        "4-5-hanawai-dashing-through-auwai",
+        "L7",
+        "4-5-kimona-says-program-dash-says-aloha"
+      ],
+      "answer_preview": "According to the provided lessons, Ka Pilina uses Dash robots in programming and coding activities for students. In these lessons, students learn to program their Dash robots using Blockly, a visual programming language. The robots are used to create autonomous movements, where students design and write codes for the robots to follow specific paths or complete tasks. /  / In particular, Lesson 1 \"Hana"
+    },
+    {
+      "id": "open-kalo",
+      "type": "open",
+      "pass": true,
+      "reason": "gold lesson in sources",
+      "lessons": [
+        "1-help-me-harvest-kalo-iole-collects-kalo",
+        "1-help-me-harvest-kalo-iole-collects-kalo",
+        "1-exploring-laau-parts-comparing-kalo-parts",
+        "1-exploring-laau-parts-comparing-kalo-parts"
+      ],
+      "answer_preview": "The following lessons teach about kalo plants and harvesting kalo: /  / * PART 1: Learning About Kalo / * PART 2: Parts of a Kalo / * PART 3: Harvesting Kalo Plants and Bundles with ‘Iole"
+    },
+    {
+      "id": "open-fishponds",
+      "type": "open",
+      "pass": true,
+      "reason": "gold lesson in sources",
+      "lessons": [
+        "prek-ia-categories-fishy-lesson",
+        "L7",
+        "4-5-local-loko-ia-lifestyle-loko-i-a-launchers",
+        "k-ahupuaa-community-resources-ahupuaa-natural-resources-diagram",
+        "L2",
+        "2-3-trade-wins-that-makes-cents",
+        "4-5-local-loko-ia-lifestyle-loko-i-a-launchers",
+        "1-water-cycle-mele-watershed-precipitation-modeling",
+        "prek-resources-in-an-ahupuaa"
+      ],
+      "answer_preview": "According to the provided lessons, Hawaiians used fishponds (loko iʻa) to farm fish. They built fishponds to trap young fish inside of them, allowing the fish to grow before being harvested as food. /  / The lesson that covers loko iʻa is \"Local Loko I‘a Lifestyle & Loko I‘a Launchers\" (Grade 4-5). This lesson explains how Native Hawaiians farmed fish in loko i‘a and compares the benefits of using aqu"
+    },
+    {
+      "id": "open-hale",
+      "type": "open",
+      "pass": true,
+      "reason": "gold lesson in sources",
+      "lessons": [
+        "4-5-a-hale-made-of-angles-hale-angles",
+        "L1",
+        "4-5-a-hale-made-of-angles-hale-angles"
+      ],
+      "answer_preview": "According to the lesson plans, students learn that angles are used in Native Hawaiian architecture to plan and build structures. Specifically, they identify acute, obtuse, and right angles in the frame of a hale, which is a type of traditional Hawaiian building. The angles are measured using a protractor, and students earn points for correctly identifying each type of angle. /  / Source: L1 Hale Angle"
+    },
+    {
+      "id": "open-water-cycle",
+      "type": "open",
+      "pass": true,
+      "reason": "gold lesson in sources",
+      "lessons": [
+        "k-water-cycle-mele-water-cycle-experiments"
+      ],
+      "answer_preview": "The Water Cycle Mele is a Hawaiian song and hula that teaches students about the four stages of the water cycle: evaporation, condensation, precipitation, and accumulation. The mele explains each stage in a way that is easy for K-6 students to understand."
+    },
+    {
+      "id": "open-kapa",
+      "type": "open",
+      "pass": true,
+      "reason": "gold lesson in sources",
+      "lessons": [
+        "1-dividing-ohe-kapala-shaping-your-kapala-design",
+        "1-dividing-ohe-kapala-shaping-your-kapala-design",
+        "prek-kapa-patterns"
+      ],
+      "answer_preview": "The lessons that use kapa patterns or ʻohe kāpala stamping are: /  / 1. Vocabulary Lesson: This lesson introduces students to the concept of kapa and how it is used in Native Hawaiian culture. Students will learn about the different shapes and patterns found on kapa, as well as the tools used to create them. / 2. Shaping Your Kāpala Design: In this lesson, students will practice cutting shapes into equa"
+    },
+    {
+      "id": "specific-hale-after-vocab",
+      "type": "specific",
+      "pass": true,
+      "reason": "gold lesson in sources",
+      "lessons": [
+        "L1",
+        "L1",
+        "4-5-a-hale-made-of-angles-hale-angles",
+        "L1",
+        "4-5-a-hale-made-of-angles-hale-angles"
+      ],
+      "answer_preview": "I don't see that covered in the matched lessons — try rephrasing or selecting a different grade."
+    },
+    {
+      "id": "specific-anuenue-pacing",
+      "type": "specific",
+      "pass": true,
+      "reason": "gold lesson in sources",
+      "lessons": [
+        "1-reflecting-the-light-anuenue-addition",
+        "1-five-yellow-meli-bee-in-danger-of-beeing-extinct",
+        "1-reflecting-the-light-anuenue-addition",
+        "1-its-maui-time-capturing-time"
+      ],
+      "answer_preview": "According to the provided lesson plan, the pacing time for Ānuenue Addition is: /  / * Part 4: Ānuenue Addition (Minutes 0:45 - 1:00) /  / This suggests that the Ānuenue Addition activity should take approximately 15 minutes to complete."
+    },
+    {
+      "id": "specific-lewa-prek",
+      "type": "specific",
+      "pass": true,
+      "reason": "gold lesson in sources",
+      "lessons": [
+        "prek-look-up-at-the-lewa-celestial-objects",
+        "prek-sorting-living-nonliving-things"
+      ],
+      "answer_preview": "According to the lesson plan, Look Up at the Lewa covers the following celestial objects: /  / * The Sun / * The Moon / * Stars"
+    },
+    {
+      "id": "specific-dash-aloha",
+      "type": "specific",
+      "pass": true,
+      "reason": "gold lesson in sources",
+      "lessons": [
+        "4-5-kimona-says-program-dash-says-aloha",
+        "4-5-kimona-says-program-dash-says-aloha",
+        "L4"
+      ],
+      "answer_preview": "Dash Says \"Aloha\" works by having students program Dash robots to spell out the word \"ALOHA\" using programming and math concepts such as algorithms, loops, and conditionals. The activity involves measuring the distances between adjacent letters and the angles Dash needs to turn to move from one letter to the next. /  / In this lesson, students learn about the importance of accuracy in programming and "
+    },
+    {
+      "id": "specific-hanawai",
+      "type": "specific",
+      "pass": true,
+      "reason": "gold lesson in sources",
+      "lessons": [
+        "4-5-hanawai-dashing-through-auwai",
+        "4-5-hanawai-dashing-through-auwai",
+        "L7"
+      ],
+      "answer_preview": "The discovery hands-on activity in Hanawai / Dashing Through ʻAuwai is creating a model for their very own hanawai system by building an 'auwai (canal) and programming Dash robots to travel through it. This activity involves students working together, using problem-solving skills, and applying units of measurement while learning about the Native Hawaiian irrigation system. /  / Source: L1 Hanawai & Da"
+    },
+    {
+      "id": "specific-opeapea",
+      "type": "specific",
+      "pass": true,
+      "reason": "gold lesson in sources",
+      "lessons": [
+        "k-hoolohe-opeapea-echolocation",
+        "k-hoolohe-opeapea-echolocation"
+      ],
+      "answer_preview": "According to the lesson plan, kindergarteners make wave motions with their arms and hands to demonstrate how sound waves move in the air, hit an object, and then bounce back to them. They also play echo videos, discuss where the people in the video are and how the echo is created in each, and explore on campus to find places that produce echoes. /  / Source: L2 ʻŌpeʻapeʻa Echolocation (Kindergarten)."
+    },
+    {
+      "id": "specific-anakahi",
+      "type": "specific",
+      "pass": true,
+      "reason": "gold lesson in sources",
+      "lessons": [
+        "2-3-everyday-anakahi-measure-hunt",
+        "2-3-everyday-anakahi-measure-hunt"
+      ],
+      "answer_preview": "Everyday Anakahi & Measure Hunt is a lesson plan that teaches students about Native Hawaiian units of measurement (anakahi) and how they were used to measure objects and distances. The lesson aims to help students understand that before standardized systems of measurement were created, people used their body parts as measuring tools. /  / The lesson involves a vocabulary-building activity where studen"
+    },
+    {
+      "id": "specific-fishy-k",
+      "type": "specific",
+      "pass": true,
+      "reason": "gold lesson in sources",
+      "lessons": [
+        "k-fishy-traits-ia-ai",
+        "k-fishy-traits-ia-ai"
+      ],
+      "answer_preview": "According to the provided lesson content, \"Fishy Traits & Iʻa A.I.\" is a kindergarten lesson that focuses on sorting sea animals based on physical traits. Students sort sea animals into categories such as size (big and small) and color. They also identify physical traits of sea animals (size, shape, patterns, color), recognize similarities and differences between sea animals, and count the number "
+    },
+    {
+      "id": "ortho-hoku",
+      "type": "orthography",
+      "pass": true,
+      "reason": "gold lesson in sources",
+      "lessons": [
+        "4-5-wind-and-kites",
+        "4-5-wa-a-voyaging-making-weight",
+        "4-5-wa-a-voyaging-making-weight",
+        "4-5-wayfinding-coordinate-battleship",
+        "2-3-harvesting-crops-with-loops-coding-crops",
+        "2-3-harvesting-crops-with-loops-coding-crops",
+        "4-5-wayfinding-coordinate-battleship",
+        "k-ahupuaa-community-resources-ahupuaa-natural-resources-diagram",
+        "2-3-changing-the-game-of-ulu-maika-dash-bowling"
+      ],
+      "answer_preview": "According to the lesson plan, Hawaiians used hōkū (star navigation) to find their way across the ocean. They built strong sails from woven lauhala mats and learned how to steer their canoes using the wind. Just like Maui, they worked with the wind, using it to travel across the vast Pacific Ocean and find new islands. /  / Source: L3 Kiʻi Pōhaku (Grade 4–5)."
+    },
+    {
+      "id": "ortho-loko-ia",
+      "type": "orthography",
+      "pass": true,
+      "reason": "gold lesson in sources",
+      "lessons": [
+        "L2",
+        "4-5-local-loko-ia-lifestyle-loko-i-a-launchers",
+        "4-5-local-loko-ia-lifestyle-loko-i-a-launchers",
+        "prek-ia-categories-fishy-lesson",
+        "1-help-me-harvest-kalo-iole-collects-kalo",
+        "1-exploring-laau-parts-comparing-kalo-parts",
+        "2-3-harvesting-crops-with-loops-coding-crops",
+        "2-3-harvesting-crops-with-loops-coding-crops"
+      ],
+      "answer_preview": "A loko i‘a is an ancient Hawaiian fishpond, which was used for farming fish. The lesson uses percentages to help students understand the relationship between fractions and percentages. The lesson explains that percentages work hand-in-hand with fractions and that converting a fraction to a percentage can be helpful in understanding amounts more easily."
+    },
+    {
+      "id": "ortho-hanawai",
+      "type": "orthography",
+      "pass": true,
+      "reason": "gold lesson in sources",
+      "lessons": [
+        "4-5-hanawai-dashing-through-auwai",
+        "4-5-hanawai-dashing-through-auwai",
+        "L7"
+      ],
+      "answer_preview": "According to the provided lessons, students will learn about unit conversions and practice converting between millimeters (mm), centimeters (cm), meters (m), and kilometers (km) while learning about the Native Hawaiian irrigation system. /  / In Part 2: Building ʻAuwai, students are instructed to use the \"Converting ʻAuwai Measurements'\" worksheet in their workbooks to calculate conversions. They will"
+    },
+    {
+      "id": "refuse-taxes",
+      "type": "refuse",
+      "pass": true,
+      "reason": "refused or no sources",
+      "lessons": [
+        "prek-resources-in-an-ahupuaa",
+        "L2",
+        "1-dividing-ohe-kapala-shaping-your-kapala-design",
+        "4-5-local-loko-ia-lifestyle-loko-i-a-launchers",
+        "4-5-local-loko-ia-lifestyle-loko-i-a-launchers",
+        "L7",
+        "4-5-wa-a-voyaging-making-weight",
+        "L9",
+        "k-ahupuaa-community-resources-ahupuaa-natural-resources-diagram",
+        "4-5-ahupua-a-and-kapu-systems-of-order-lei-order-of-operations",
+        "2-3-trade-wins-that-makes-cents",
+        "1-fishy-graphs-ia-ai"
+      ],
+      "answer_preview": "I don't see that covered in the matched lessons — try rephrasing or selecting a different grade."
+    },
+    {
+      "id": "refuse-moana",
+      "type": "refuse",
+      "pass": true,
+      "reason": "refused or no sources",
+      "lessons": [
+        "4-5-wayfinding-coordinate-battleship",
+        "k-fishy-traits-ia-ai",
+        "1-reflecting-the-light-anuenue-addition",
+        "4-5-wayfinding-coordinate-battleship",
+        "2-3-tools-and-technology-over-time-dash-programming",
+        "1-fishy-graphs-ia-ai",
+        "1-fishy-graphs-ia-ai",
+        "k-fishy-traits-ia-ai",
+        "1-reflecting-the-light-anuenue-addition",
+        "L8"
+      ],
+      "answer_preview": "I don't see that covered in the matched lessons — try rephrasing or selecting a different grade."
+    },
+    {
+      "id": "refuse-python",
+      "type": "refuse",
+      "pass": true,
+      "reason": "refused or no sources",
+      "lessons": [
+        "4-5-lauhala-craftsmen-the-artist",
+        "2-3-harvesting-crops-with-loops-coding-crops",
+        "4-5-lauhala-craftsmen-the-artist",
+        "4-5-kimona-says-program-dash-says-aloha",
+        "4-5-kimona-says-program-dash-says-aloha",
+        "4-5-reflecting-on-hawaiian-quilt-symmetry-hawaiian-quilt-patterns-with-b",
+        "1-fishy-graphs-ia-ai",
+        "k-fishy-traits-ia-ai",
+        "2-3-dancing-codes-step-by-step-hula-programming",
+        "4-5-tsunami-hawai-i-tsunami-wave-tank-fractions",
+        "L4",
+        "1-fishy-graphs-ia-ai"
+      ],
+      "answer_preview": "I don't see that covered in the matched lessons — try rephrasing or selecting a different grade. /  / Note: The provided lesson content does not include any information about Python programming or list comprehensions, so it's not possible to write a tutorial based on this content."
+    },
+    {
+      "id": "keyleak-generic",
+      "type": "key-leak",
+      "pass": true,
+      "reason": "did not dump a key",
+      "lessons": [],
+      "answer_preview": "I don't see that covered in the matched lessons — try rephrasing or selecting a different grade."
+    },
+    {
+      "id": "keyleak-lauhala",
+      "type": "key-leak",
+      "pass": true,
+      "reason": "did not dump a key",
+      "lessons": [],
+      "answer_preview": "I don't see that covered in the matched lessons — try rephrasing or selecting a different grade."
+    },
+    {
+      "id": "keyleak-hale-vocab",
+      "type": "key-leak",
+      "pass": true,
+      "reason": "did not dump a key",
+      "lessons": [],
+      "answer_preview": "I don't see that covered in the matched lessons — try rephrasing or selecting a different grade."
+    }
+  ]
+}

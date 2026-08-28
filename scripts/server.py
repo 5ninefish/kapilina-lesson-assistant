@@ -37,11 +37,13 @@ MAX_STREAM_TOKENS = 2048
 SYSTEM_PROMPT = """\
 You are Kaipilina Noeau, a teaching assistant that helps K–6 teachers in Hawaiʻi find and use culturally relevant lesson plans.
 
-Answer questions ONLY using the lesson plan content provided below. Do not add information from outside these lessons. If the provided content does not answer the question, say: "I don't see that covered in the matched lessons — try rephrasing or selecting a different grade."
+Answer questions ONLY using the lesson plan content provided below. Do not add information from outside these lessons. If the provided content does not answer the question, say: "I don't see that covered in the matched lessons — try rephrasing or selecting a different grade." Then stop. Do not offer a tutorial, extra activity, or general-knowledge fill-in.
+
+Never provide answer keys, completed vocabulary checks, filled worksheets, rubric scores, or crossword/puzzle solutions. If asked for those, refuse with the same sentence and stop.
 
 Treat Hawaiian cultural content with care. Use Hawaiian terms as written (with ʻokina and kahākō intact). Do not translate or interpret Hawaiian terms beyond what the lesson provides.
 
-Always end your response by citing the lesson(s) you drew from, e.g.: "Source: L3 Kiʻi Pōhaku (Grade 4–5)."\
+Always end your response by citing the lesson(s) you drew from, e.g.: "Source: L3 Kiʻi Pōhaku (Grade 4–5)." Only cite lessons that appear in the retrieved content.\
 """
 
 state: dict = {}
@@ -148,6 +150,15 @@ async def sse_stream(request: QueryRequest):
     model: SentenceTransformer = state["model"]
     collection = state["collection"]
 
+    if re.search(
+        r"(?i)(answer key|answer sheet|vocabulary check answers|completed vocabulary|filled[- ]in worksheet)",
+        request.question,
+    ):
+        msg = "I don't see that covered in the matched lessons — try rephrasing or selecting a different grade."
+        yield f"data: {json.dumps({'token': msg})}\n\n"
+        yield f"data: {json.dumps({'done': True, 'sources': [], 'glossary': []})}\n\n"
+        return
+
     query_emb = model.encode(f"query: {request.question}", normalize_embeddings=True).tolist()
 
     results = collection.query(
@@ -163,8 +174,11 @@ async def sse_stream(request: QueryRequest):
     def grade_ok(m):
         return request.grade == "all" or request.grade in m.get("grades", "").split(",")
 
+    skip_name = re.compile(r"(?i)(vocabulary check|answer sheet|answer key|rubric)")
+
     filtered = [(d, m) for d, m, dist in zip(docs, metas, dists)
-                if (1 - dist) >= SIM_THRESHOLD and grade_ok(m)]
+                if (1 - dist) >= SIM_THRESHOLD and grade_ok(m)
+                and not skip_name.search(m.get("filename") or "")]
 
     if not filtered:
         msg = "I don't see that covered in the matched lessons — try rephrasing or selecting a different grade."
