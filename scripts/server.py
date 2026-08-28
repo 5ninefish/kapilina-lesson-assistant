@@ -4,8 +4,11 @@ Kaipilina Noeau — RAG API server
 FastAPI + streaming SSE + conversation history + Hawaiian glossary tooltips.
 """
 
+import base64
+import hashlib
 import json
 import re
+import secrets
 import unicodedata
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -13,7 +16,7 @@ from typing import Annotated, Literal
 
 import chromadb
 import httpx
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel, Field
@@ -88,8 +91,37 @@ app.add_middleware(
     allow_origins=["https://kapilinanoeau.org", "https://kapilina-lesson-assistant.pages.dev"],
     allow_origin_regex=r"http://localhost:\d+",
     allow_methods=["GET", "POST"],
-    allow_headers=["Content-Type"],
+    allow_headers=["Authorization", "Content-Type"],
 )
+
+
+AUTH_FILE = BASE / "data/.auth"
+
+
+def _digest(s: str) -> bytes:
+    return hashlib.sha256(s.encode("utf-8")).digest()
+
+
+def require_login(request: Request) -> None:
+    if not AUTH_FILE.exists():
+        raise HTTPException(503, "login not configured")
+    line = AUTH_FILE.read_text().strip().split("\n", 1)[0]
+    if ":" not in line:
+        raise HTTPException(503, "login not configured")
+    exp_user, exp_pass = line.split(":", 1)
+    header = request.headers.get("authorization") or ""
+    if not header.lower().startswith("basic "):
+        raise HTTPException(401, "login required")
+    try:
+        raw = base64.b64decode(header.split(None, 1)[1].encode("ascii")).decode("utf-8")
+        user, pw = raw.split(":", 1)
+    except Exception:
+        raise HTTPException(401, "login required")
+    if not (
+        secrets.compare_digest(_digest(user), _digest(exp_user))
+        and secrets.compare_digest(_digest(pw), _digest(exp_pass))
+    ):
+        raise HTTPException(401, "login required")
 
 
 class Message(BaseModel):
@@ -105,7 +137,8 @@ class QueryRequest(BaseModel):
 
 
 @app.get("/lessons")
-async def list_lessons():
+async def list_lessons(request: Request):
+    require_login(request)
     items = []
     for lid, info in (state.get("grade_map") or {}).items():
         if _re.match(r"^L\d+$", lid):
@@ -246,6 +279,7 @@ async def sse_stream(request: QueryRequest):
 @app.post("/query")
 @limiter.limit("20/minute")
 async def query(body: QueryRequest, request: Request):
+    require_login(request)
     return StreamingResponse(
         sse_stream(body),
         media_type="text/event-stream",
@@ -389,8 +423,8 @@ def _extract_lesson_html(path):
 
 
 @app.get("/lesson/{lesson_id}")
-async def get_lesson(lesson_id: str):
-    from fastapi import HTTPException
+async def get_lesson(lesson_id: str, request: Request):
+    require_login(request)
     lid = _norm_lesson_id(lesson_id)
     if not _re.match(r"^(L\d+|[A-Za-z0-9][A-Za-z0-9._-]{0,80})$", lid):
         raise HTTPException(400, "Invalid lesson ID")

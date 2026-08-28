@@ -271,8 +271,41 @@
       display:inline-flex; align-items:center; gap:3px;
       background:var(--orange-light); border:1px solid rgba(194,103,26,0.25);
       border-radius:5px; padding:2px 7px; font-size:0.7rem; color:var(--slate-mid);
+      font-family:inherit; cursor:pointer;
+    }
+    button.src-chip:hover, button.src-chip:focus-visible {
+      border-color: var(--orange); color: var(--slate);
     }
     .src-id { font-weight:700; color:var(--orange); }
+
+    #login-gate {
+      position:fixed; inset:0; z-index:80;
+      background: var(--cream, #f7f1e8);
+      display:flex; align-items:center; justify-content:center;
+      padding:24px;
+    }
+    #login-gate[hidden] { display:none; }
+    .login-card {
+      width:min(360px, 100%);
+      background: var(--panel-solid, #fff);
+      border:1px solid var(--border, #e0d4c4);
+      border-radius:14px; padding:28px 24px 22px;
+      box-shadow: 0 10px 40px rgba(60,40,20,0.12);
+    }
+    .login-card h2 { margin:0 0 6px; font-size:1.15rem; color:var(--slate); }
+    .login-card p { margin:0 0 18px; font-size:.88rem; color:var(--slate-mid); }
+    .login-card label { display:block; font-size:.75rem; font-weight:600; margin:0 0 4px; color:var(--slate-mid); }
+    .login-card input {
+      width:100%; box-sizing:border-box; margin-bottom:12px;
+      border:1.5px solid var(--border); border-radius:9px;
+      padding:9px 12px; font-size:.9rem; font-family:inherit;
+    }
+    .login-card button {
+      width:100%; margin-top:6px; border:0; border-radius:9px;
+      padding:10px 12px; font-size:.9rem; font-weight:600; font-family:inherit;
+      background:var(--orange); color:#fff; cursor:pointer;
+    }
+    .login-card .login-err { color:var(--red, #b33); font-size:.8rem; min-height:1.1em; margin:0 0 8px; }
 
     .cursor { display:inline-block; width:2px; height:1em; background:var(--orange); margin-left:2px; vertical-align:text-bottom; animation:blink .7s infinite; }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
@@ -337,7 +370,19 @@
 </head>
 <body>
 <a class="skip-nav" href="#main-content">Skip to main content</a>
-<div id="app">
+<div id="login-gate" role="dialog" aria-labelledby="login-title">
+  <form class="login-card" id="login-form">
+    <h2 id="login-title">Ka Pilina Noʻeau</h2>
+    <p>Teacher login for the lesson assistant.</p>
+    <p class="login-err" id="login-err" aria-live="polite"></p>
+    <label for="login-user">Username</label>
+    <input id="login-user" name="username" autocomplete="username" required>
+    <label for="login-pass">Password</label>
+    <input id="login-pass" name="password" type="password" autocomplete="current-password" required>
+    <button type="submit">Sign in</button>
+  </form>
+</div>
+<div id="app" hidden>
 
   <!-- SIDEBAR -->
   <aside aria-label="Lesson navigation">
@@ -449,10 +494,62 @@ var x0=["BN","BN","BN","BN","BN","BN","BN","BN","BN","S","B","S","WS","B","BN","
 </script>
 <script>
 const API = 'https://kaipilina-api.peakforge.net';
+const AUTH_KEY = 'kpn-basic';
 let grade = 'all';
 let history = [];
 let streaming = false;
 let currentLesson = null;
+
+function authHeaders(){
+  const t=sessionStorage.getItem(AUTH_KEY);
+  return t?{'Authorization':'Basic '+t}:{};
+}
+function apiFetch(path, opts){
+  opts=opts||{};
+  const headers=Object.assign({}, authHeaders(), opts.headers||{});
+  return fetch(API+path, Object.assign({}, opts, {headers}));
+}
+function showApp(){
+  document.getElementById('login-gate').hidden=true;
+  document.getElementById('app').hidden=false;
+}
+function showLogin(msg){
+  sessionStorage.removeItem(AUTH_KEY);
+  document.getElementById('login-gate').hidden=false;
+  document.getElementById('app').hidden=true;
+  const err=document.getElementById('login-err');
+  if(err) err.textContent=msg||'';
+}
+function loadLessons(){
+  return apiFetch('/lessons').then(r=>{
+    if(r.status===401){ showLogin('Sign in to continue.'); throw 0; }
+    return r.json();
+  }).then(d=>{
+    if(d.lessons && d.lessons.length){
+      LESSONS=d.lessons.map(l=>({id:l.id, title:l.title, grades:l.grades||[], status:l.status||'ready'}));
+      updateGradeCounts();
+      renderLessons();
+    }
+  }).catch(()=>{});
+}
+document.getElementById('login-form').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const user=document.getElementById('login-user').value.trim();
+  const pass=document.getElementById('login-pass').value;
+  const token=btoa(unescape(encodeURIComponent(user+':'+pass)));
+  sessionStorage.setItem(AUTH_KEY, token);
+  const r=await apiFetch('/lessons');
+  if(!r.ok){ showLogin('That login did not work.'); return; }
+  showApp();
+  loadLessons();
+  if(typeof checkHealth==='function') checkHealth();
+});
+if(sessionStorage.getItem(AUTH_KEY)){
+  apiFetch('/lessons').then(r=>{
+    if(r.ok){ showApp(); loadLessons(); }
+    else showLogin();
+  }).catch(()=>showLogin());
+}
 
 let LESSONS = [
   {id:'L1', title:'Hale / Angles',               grades:['4','5']},
@@ -478,13 +575,7 @@ function updateGradeCounts(){
     if(gc){ gc.textContent=n; gc.setAttribute('aria-label', n+' lessons'); }
   });
 }
-fetch(API+'/lessons').then(r=>r.json()).then(d=>{
-  if(d.lessons && d.lessons.length){
-    LESSONS=d.lessons.map(l=>({id:l.id, title:l.title, grades:l.grades||[], status:l.status||'ready'}));
-    updateGradeCounts();
-    renderLessons();
-  }
-}).catch(()=>{});
+
 
 /* helpers */
 function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -574,7 +665,8 @@ async function openLesson(id, title, opener){
     if(first) first.focus();
   });
   try {
-    const r=await fetch(API+'/lesson/'+encodeURIComponent(id));
+    const r=await apiFetch('/lesson/'+encodeURIComponent(id));
+    if(r.status===401){ showLogin('Sign in to continue.'); return; }
     if(!r.ok) throw new Error('HTTP '+r.status);
     const d=await r.json();
     document.getElementById('modal-grades').textContent='Grade '+d.grades.join(', ');
@@ -692,8 +784,20 @@ function applyGlossary(bubble, hits) {
 function addSources(msgEl,sources){
   if(!sources||!sources.length) return;
   const div=document.createElement('div'); div.className='sources';
-  sources.forEach(s=>{ const chip=document.createElement('span'); chip.className='src-chip'; chip.innerHTML='<span class="src-id">'+esc(s.lesson)+'</span> '+esc(s.title); div.appendChild(chip); });
-  msgEl.appendChild(div);
+  const seen=new Set();
+  sources.forEach(s=>{
+    const id=s.lesson||'';
+    if(!id||seen.has(id)) return;
+    seen.add(id);
+    const chip=document.createElement('button');
+    chip.type='button';
+    chip.className='src-chip';
+    chip.innerHTML='<span class="src-id">'+esc(s.lesson)+'</span> '+esc(s.title);
+    chip.setAttribute('aria-label','Open lesson '+s.title);
+    chip.addEventListener('click',()=>openLesson(id, s.title, chip));
+    div.appendChild(chip);
+  });
+  if(div.childNodes.length) msgEl.appendChild(div);
 }
 
 const inp=document.getElementById('q-input'), sendBtn=document.getElementById('send-btn');
@@ -712,7 +816,8 @@ async function send(){
   const cursor=document.createElement('span'); cursor.className='cursor'; bubble.appendChild(cursor);
   let full='';
   try {
-    const resp=await fetch(API+'/query',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question,grade,messages:history.slice(-8)})});
+    const resp=await apiFetch('/query',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question,grade,messages:history.slice(-8)})});
+    if(resp.status===401){ showLogin('Sign in to continue.'); return; }
     if(!resp.ok) throw new Error('HTTP '+resp.status);
     const reader=resp.body.getReader(), dec=new TextDecoder(); let buf='';
     while(true){
