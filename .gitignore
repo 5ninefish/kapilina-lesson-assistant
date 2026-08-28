@@ -8,3 +8,4 @@ venv/
 __pycache__/
 *.pyc
 logs/
+public/its-ask.html

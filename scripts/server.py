@@ -15,7 +15,7 @@ import chromadb
 import httpx
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
+from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel, Field
 from sentence_transformers import SentenceTransformer
 from slowapi import Limiter, _rate_limit_exceeded_handler
@@ -122,6 +122,16 @@ async def list_lessons():
     band_order = {"PreK": 0, "K": 1, "1": 2, "2-3": 3, "4-5": 4}
     items.sort(key=lambda x: (band_order.get(x.get("band") or "", 9), x["title"].lower()))
     return {"lessons": items}
+
+
+@app.get("/its-ask")
+async def its_ask():
+    """Temporary ITS one-pager. File is not in the public git repo."""
+    path = BASE / "public/its-ask.html"
+    if not path.exists():
+        from fastapi import HTTPException
+        raise HTTPException(404, "ITS one-pager not mounted")
+    return FileResponse(path, media_type="text/html; charset=utf-8")
 
 
 @app.get("/health")
