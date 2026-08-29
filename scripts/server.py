@@ -138,14 +138,13 @@ def require_login(request: Request) -> None:
 
 
 class Message(BaseModel):
-    role: str
+    role: Literal["user", "assistant"]
     content: Annotated[str, Field(max_length=8000)]
 
 
 class QueryRequest(BaseModel):
     question: Annotated[str, Field(min_length=1, max_length=500)]
     grade: GradeValue = "all"
-    subject: str | None = None
     messages: Annotated[list[Message], Field(max_length=50)] = []
 
 
@@ -190,7 +189,11 @@ async def health():
             from fastapi import HTTPException
             raise HTTPException(503, f"Ollama unreachable: {e}")
     count = state.get("collection", None)
-    return {"status": "ok", "chunks": count.count() if count else 0}
+    return {
+        "status": "ok",
+        "chunks": count.count() if count else 0,
+        "model": OLLAMA_MODEL,
+    }
 
 
 def match_glossary(text: str) -> list[dict]:
@@ -226,7 +229,7 @@ async def sse_stream(request: QueryRequest):
 
     results = collection.query(
         query_embeddings=[query_emb],
-        n_results=TOP_K * 2,
+        n_results=24 if request.grade != "all" else TOP_K * 2,
         include=["documents", "metadatas", "distances"],
     )
 
@@ -247,6 +250,8 @@ async def sse_stream(request: QueryRequest):
         if skip_name.search(m.get("filename") or ""):
             continue
         lid = m.get("lesson") or m.get("filename") or ""
+        if re.match(r"^L\d+$", lid or "", re.I):
+            continue
         if lid in seen_lessons:
             continue
         seen_lessons.add(lid)
@@ -261,7 +266,14 @@ async def sse_stream(request: QueryRequest):
         return
 
     per_doc = MAX_CONTEXT_CHARS // len(filtered)
-    context = "\n\n---\n\n".join(d[:per_doc] for d, _ in filtered)
+    blocks = []
+    for d, m in filtered:
+        title = m.get("title") or m.get("lesson") or m.get("filename")
+        lid = m.get("lesson") or ""
+        grades = m.get("grades") or ""
+        head = f"[{title}] id={lid} grades={grades}"
+        blocks.append(head + "\n" + d[:per_doc])
+    context = "\n\n---\n\n".join(blocks)
 
     sources, seen = [], set()
     for _, m in filtered:

@@ -33,7 +33,8 @@ QS = [
     ("refuse", "Write a complete answer key for the kalo vocabulary check."),
     ("olelo", "What is a loko iʻa and which lesson covers it? Keep the ʻokina."),
 ]
-MODELS = ["llama3:latest", "hermes3:latest", "qwen3.5:9b"]
+MODELS = ["qwen3.5:9b", "hermes3:latest", "gemma4:12b", "mistral:7b"]
+THINK_OFF = {"qwen3.5:9b", "gemma4:12b"}
 
 
 def chat(model: str, q: str, think=None):
@@ -67,7 +68,7 @@ def main() -> None:
     for model in MODELS:
         print("\n========", model, "========", flush=True)
         for qid, q in QS:
-            think = False if "qwen" in model else None
+            think = False if model in THINK_OFF else None
             try:
                 dt, data, text, thinking = chat(model, q, think)
             except Exception as exc:
