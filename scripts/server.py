@@ -32,7 +32,7 @@ GLOSSARY_PATH = BASE / "data/glossary.json"
 GRADE_MAP_PATH = BASE / "data/grade_map.json"
 EMBED_MODEL = "intfloat/multilingual-e5-large"
 OLLAMA_HOST = "http://localhost:11434"
-OLLAMA_MODEL = "llama3:latest"  # PF tag; Llama 3 8B (llama3:8b is not installed)
+OLLAMA_MODEL = "qwen3.5:9b"  # instruct; thinking off. llama3:latest leaked keys in bakeoff.
 TOP_K = 4
 SIM_THRESHOLD = 0.50
 MAX_CONTEXT_CHARS = 3600
@@ -84,6 +84,7 @@ async def lifespan(app: FastAPI):
                              "model": OLLAMA_MODEL,
                              "messages": [{"role": "user", "content": "hi"}],
                              "stream": False,
+                             "think": False,
                              "keep_alive": -1,
                              "options": {"num_predict": 1, "num_ctx": NUM_CTX},
                          })
@@ -289,6 +290,7 @@ async def sse_stream(request: QueryRequest):
                 "model": OLLAMA_MODEL,
                 "messages": messages,
                 "stream": True,
+                "think": False,
                 "keep_alive": -1,
                 "options": {
                     "num_predict": NUM_PREDICT,
