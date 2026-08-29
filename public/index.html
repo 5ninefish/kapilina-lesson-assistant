@@ -398,7 +398,7 @@
       <div class="section-label">Overview</div>
       <div class="stat-item">
         <div class="stat-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div>
-        <div><div class="stat-label">Lessons</div><div class="stat-value">9</div></div>
+        <div><div class="stat-label">Lessons</div><div class="stat-value" id="lesson-total">—</div></div>
       </div>
       <div class="stat-item">
         <div class="stat-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
@@ -408,14 +408,14 @@
     <div class="sidebar-section grow">
       <div class="section-label">Filter by Grade</div>
       <div class="grade-nav" id="grade-nav">
-        <button class="gnav-btn active" data-grade="all" aria-pressed="true">All Grades <span class="gc" aria-label="9 lessons">9</span></button>
+        <button class="gnav-btn active" data-grade="all" aria-pressed="true">All Grades <span class="gc" aria-label="0 lessons">0</span></button>
         <button class="gnav-btn" data-grade="PreK" aria-pressed="false">PreK <span class="gc" aria-label="0 lessons">0</span></button>
         <button class="gnav-btn" data-grade="K" aria-pressed="false">Kindergarten <span class="gc" aria-label="0 lessons">0</span></button>
         <button class="gnav-btn" data-grade="1" aria-pressed="false">Grade 1 <span class="gc" aria-label="0 lessons">0</span></button>
         <button class="gnav-btn" data-grade="2" aria-pressed="false">Grade 2 <span class="gc" aria-label="0 lessons">0</span></button>
         <button class="gnav-btn" data-grade="3" aria-pressed="false">Grade 3 <span class="gc" aria-label="0 lessons">0</span></button>
-        <button class="gnav-btn" data-grade="4" aria-pressed="false">Grade 4 <span class="gc" aria-label="9 lessons">9</span></button>
-        <button class="gnav-btn" data-grade="5" aria-pressed="false">Grade 5 <span class="gc" aria-label="9 lessons">9</span></button>
+        <button class="gnav-btn" data-grade="4" aria-pressed="false">Grade 4 <span class="gc" aria-label="0 lessons">0</span></button>
+        <button class="gnav-btn" data-grade="5" aria-pressed="false">Grade 5 <span class="gc" aria-label="0 lessons">0</span></button>
         <button class="gnav-btn" data-grade="6" aria-pressed="false">Grade 6 <span class="gc" aria-label="0 lessons">0</span></button>
       </div>
     </div>
@@ -429,7 +429,7 @@
   <main id="main-content" aria-label="Lesson library">
     <div class="main-header">
       <h2 id="main-title">All Lessons</h2>
-      <span class="lcount" id="lcount">9 lessons</span>
+      <span class="lcount" id="lcount"></span>
     </div>
     <div class="lesson-grid" id="lesson-grid"></div>
   </main>
@@ -528,7 +528,7 @@ function loadLessons(){
     return r.json();
   }).then(d=>{
     if(d.lessons && d.lessons.length){
-      LESSONS=d.lessons.map(l=>({id:l.id, title:l.title, grades:l.grades||[], status:l.status||'ready'}));
+      LESSONS=d.lessons.map(l=>({id:l.id, title:l.title, grades:(l.grades||[]).map(String), status:l.status||'ready'}));
       updateGradeCounts();
       renderLessons();
     }
@@ -553,23 +553,16 @@ if(sessionStorage.getItem(AUTH_KEY)){
   }).catch(()=>showLogin());
 }
 
-let LESSONS = [
-  {id:'L1', title:'Hale / Angles',               grades:['4','5']},
-  {id:'L2', title:'Loko Iʻa / Fish Fractions', grades:['4','5']},
-  {id:'L3', title:'Kiʻi Pōhaku / Cryptography', grades:['4','5']},
-  {id:'L4', title:'Kimona / Dash Robot',          grades:['4','5']},
-  {id:'L5', title:'Lauhala / Artist',             grades:['4','5']},
-  {id:'L6', title:'Quilt / Binary',               grades:['4','5']},
-  {id:'L7', title:'ʻAuwai / Measurements',  grades:['4','5']},
-  {id:'L8', title:'Wayfinding / Battleship',      grades:['4','5']},
-  {id:'L9', title:'Ahupuaʻa / Kapu',         grades:['4','5']},
-];
+let LESSONS = [];
 
 function gradeCount(g){
   if(g==='all') return LESSONS.length;
   return LESSONS.filter(l=>l.grades.includes(g)).length;
 }
 function updateGradeCounts(){
+  const total=gradeCount('all');
+  const ov=document.getElementById('lesson-total');
+  if(ov) ov.textContent=String(total);
   document.querySelectorAll('.gnav-btn').forEach(btn=>{
     const g=btn.dataset.grade;
     const n=gradeCount(g);
