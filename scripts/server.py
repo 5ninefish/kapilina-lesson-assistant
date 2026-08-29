@@ -209,7 +209,9 @@ async def sse_stream(request: QueryRequest):
     yield f"data: {json.dumps({'status': 'searching'})}\n\n"
 
     if re.search(
-        r"(?i)(answer key|answer sheet|vocabulary check answers|completed vocabulary|filled[- ]in worksheet)",
+        r"(?i)(answer key|answer sheet|vocabulary check answers|completed vocabulary|"
+        r"filled[- ]in worksheet|fill in every blank|correct answers for the|"
+        r"answers filled in|complete(?:d)? the (?:vocab|vocabulary|assessment|worksheet))",
         request.question,
     ):
         msg = "I don't see that covered in the matched lessons — try rephrasing or selecting a different grade."
@@ -274,8 +276,9 @@ async def sse_stream(request: QueryRequest):
         {"role": "user", "content": f"Retrieved lesson content:\n{context}"},
     ]
     for m in request.messages[-MAX_HISTORY:]:
-        role = m.role if m.role in ("user", "assistant") else "user"
-        messages.append({"role": role, "content": m.content})
+        if m.role not in ("user", "assistant"):
+            continue
+        messages.append({"role": m.role, "content": m.content})
     messages.append({"role": "user", "content": request.question})
 
     yield f"data: {json.dumps({'status': 'writing'})}\n\n"
@@ -316,6 +319,13 @@ async def sse_stream(request: QueryRequest):
                     token_count += 1
                     yield f"data: {json.dumps({'token': token})}\n\n"
                     if token_count >= MAX_STREAM_TOKENS:
+                        break
+                    joined = "".join(full_tokens)
+                    if re.search(
+                        r"I don't see that covered in the matched lessons",
+                        joined,
+                        re.I,
+                    ):
                         break
                 if chunk.get("done"):
                     break
