@@ -4,6 +4,7 @@ Kaipilina Noeau — RAG API server
 FastAPI + streaming SSE + conversation history + Hawaiian glossary tooltips.
 """
 
+import asyncio
 import base64
 import hashlib
 import json
@@ -32,10 +33,13 @@ GRADE_MAP_PATH = BASE / "data/grade_map.json"
 EMBED_MODEL = "intfloat/multilingual-e5-large"
 OLLAMA_HOST = "http://localhost:11434"
 OLLAMA_MODEL = "llama3:latest"  # PF tag; Llama 3 8B (llama3:8b is not installed)
-TOP_K = 5
+TOP_K = 4
 SIM_THRESHOLD = 0.50
-MAX_CONTEXT_CHARS = 3000 * 4
-MAX_STREAM_TOKENS = 2048
+MAX_CONTEXT_CHARS = 3600
+MAX_STREAM_TOKENS = 400
+MAX_HISTORY = 4
+NUM_PREDICT = 320
+NUM_CTX = 4096
 
 SYSTEM_PROMPT = """\
 You are Kaipilina Noeau, a teaching assistant that helps K–6 teachers in Hawaiʻi find and use culturally relevant lesson plans.
@@ -46,7 +50,9 @@ Never provide answer keys, completed vocabulary checks, filled worksheets, rubri
 
 Treat Hawaiian cultural content with care. Use Hawaiian terms as written (with ʻokina and kahākō intact). Do not translate or interpret Hawaiian terms beyond what the lesson provides.
 
-Always end your response by citing the lesson(s) you drew from, e.g.: "Source: L3 Kiʻi Pōhaku (Grade 4–5)." Only cite lessons that appear in the retrieved content.\
+Always end your response by citing the lesson(s) you drew from, e.g.: "Source: L3 Kiʻi Pōhaku (Grade 4–5)." Only cite lessons that appear in the retrieved content.
+
+Keep answers under 150 words. Lead with the answer. Do not repeat the question. Do not list every activity unless asked.\
 """
 
 state: dict = {}
@@ -74,7 +80,13 @@ async def lifespan(app: FastAPI):
     async with httpx.AsyncClient(timeout=30) as c:
         try:
             await c.post(f"{OLLAMA_HOST}/api/chat",
-                         json={"model": OLLAMA_MODEL, "messages": [{"role": "user", "content": "hi"}], "stream": False})
+                         json={
+                             "model": OLLAMA_MODEL,
+                             "messages": [{"role": "user", "content": "hi"}],
+                             "stream": False,
+                             "keep_alive": -1,
+                             "options": {"num_predict": 1, "num_ctx": NUM_CTX},
+                         })
         except Exception as e:
             print(f"Ollama pre-warm failed (non-fatal): {e}")
 
@@ -193,6 +205,8 @@ async def sse_stream(request: QueryRequest):
     model: SentenceTransformer = state["model"]
     collection = state["collection"]
 
+    yield f"data: {json.dumps({'status': 'searching'})}\n\n"
+
     if re.search(
         r"(?i)(answer key|answer sheet|vocabulary check answers|completed vocabulary|filled[- ]in worksheet)",
         request.question,
@@ -202,11 +216,14 @@ async def sse_stream(request: QueryRequest):
         yield f"data: {json.dumps({'done': True, 'sources': [], 'glossary': []})}\n\n"
         return
 
-    query_emb = model.encode(f"query: {request.question}", normalize_embeddings=True).tolist()
+    query_emb = await asyncio.to_thread(
+        model.encode, f"query: {request.question}", normalize_embeddings=True
+    )
+    query_emb = query_emb.tolist()
 
     results = collection.query(
         query_embeddings=[query_emb],
-        n_results=TOP_K * 3,
+        n_results=TOP_K * 2,
         include=["documents", "metadatas", "distances"],
     )
 
@@ -219,9 +236,20 @@ async def sse_stream(request: QueryRequest):
 
     skip_name = re.compile(r"(?i)(vocabulary check|answer sheet|answer key|rubric)")
 
-    filtered = [(d, m) for d, m, dist in zip(docs, metas, dists)
-                if (1 - dist) >= SIM_THRESHOLD and grade_ok(m)
-                and not skip_name.search(m.get("filename") or "")]
+    filtered = []
+    seen_lessons: set[str] = set()
+    for d, m, dist in zip(docs, metas, dists):
+        if (1 - dist) < SIM_THRESHOLD or not grade_ok(m):
+            continue
+        if skip_name.search(m.get("filename") or ""):
+            continue
+        lid = m.get("lesson") or m.get("filename") or ""
+        if lid in seen_lessons:
+            continue
+        seen_lessons.add(lid)
+        filtered.append((d, m))
+        if len(filtered) >= TOP_K:
+            break
 
     if not filtered:
         msg = "I don't see that covered in the matched lessons — try rephrasing or selecting a different grade."
@@ -240,21 +268,39 @@ async def sse_stream(request: QueryRequest):
             sources.append({"title": m.get("title", fn), "lesson": m.get("lesson", ""),
                             "grades": m.get("grades", ""), "filename": fn})
 
-    # Build structured messages for /api/chat — Ollama enforces role boundaries,
-    # preventing prompt injection via user-controlled question or history content.
     messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
         {"role": "user", "content": f"Retrieved lesson content:\n{context}"},
     ]
-    for m in request.messages[-8:]:
-        messages.append({"role": m.role, "content": m.content})
+    for m in request.messages[-MAX_HISTORY:]:
+        role = m.role if m.role in ("user", "assistant") else "user"
+        messages.append({"role": role, "content": m.content})
     messages.append({"role": "user", "content": request.question})
+
+    yield f"data: {json.dumps({'status': 'writing'})}\n\n"
 
     full_tokens: list[str] = []
     token_count = 0
-    async with httpx.AsyncClient(timeout=60) as c:
-        async with c.stream("POST", f"{OLLAMA_HOST}/api/chat",
-                            json={"model": OLLAMA_MODEL, "messages": messages, "stream": True}) as r:
+    async with httpx.AsyncClient(timeout=90) as c:
+        async with c.stream(
+            "POST",
+            f"{OLLAMA_HOST}/api/chat",
+            json={
+                "model": OLLAMA_MODEL,
+                "messages": messages,
+                "stream": True,
+                "keep_alive": -1,
+                "options": {
+                    "num_predict": NUM_PREDICT,
+                    "num_ctx": NUM_CTX,
+                    "temperature": 0.3,
+                },
+            },
+        ) as r:
+            if r.status_code >= 400:
+                yield f"data: {json.dumps({'token': 'The lesson assistant is busy — try again in a moment.'})}\n\n"
+                yield f"data: {json.dumps({'done': True, 'sources': sources, 'glossary': []})}\n\n"
+                return
             async for line in r.aiter_lines():
                 if not line:
                     continue

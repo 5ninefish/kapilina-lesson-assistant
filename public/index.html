@@ -233,6 +233,7 @@
       border-bottom:1px solid #ffd0c8; font-size:0.78rem; color:var(--red); text-align:center; flex-shrink:0;
     }
     .offline-banner.visible { display:block; }
+    .bubble .wait { color: var(--slate-light); font-style: italic; }
 
     .chat-messages {
       flex:1; overflow-y:auto; padding:12px 14px;
@@ -814,10 +815,12 @@ async function send(){
   streaming=true; sendBtn.disabled=true; inp.value=''; inp.style.height='auto';
   addUser(question); const msgEl=addAi();
   const bubble=document.getElementById('active-bubble');
-  const cursor=document.createElement('span'); cursor.className='cursor'; bubble.appendChild(cursor);
+  const cursor=document.createElement('span'); cursor.className='cursor';
+  const wait=document.createElement('span'); wait.className='wait'; wait.textContent='Looking up lessons…';
+  bubble.appendChild(wait); bubble.appendChild(cursor);
   let full='';
   try {
-    const resp=await apiFetch('/query',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question,grade,messages:history.slice(-8)})});
+    const resp=await apiFetch('/query',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question,grade,messages:history.slice(-4)})});
     if(resp.status===401){ showLogin('Sign in to continue.'); return; }
     if(!resp.ok) throw new Error('HTTP '+resp.status);
     const reader=resp.body.getReader(), dec=new TextDecoder(); let buf='';
@@ -829,7 +832,11 @@ async function send(){
         for(const line of part.split('\n')){
           if(!line.startsWith('data: ')) continue;
           let evt; try{evt=JSON.parse(line.slice(6));}catch{continue;}
-          if(evt.token){ full+=evt.token; bubble.textContent=full; bubble.appendChild(cursor); scrollBot(); }
+          if(evt.status==='writing' && !full){ wait.textContent='Writing…'; }
+          if(evt.token){
+            if(wait.parentNode) wait.remove();
+            full+=evt.token; bubble.textContent=full; bubble.appendChild(cursor); scrollBot();
+          }
           if(evt.done){
             cursor.remove(); bubble.id=''; bubble.textContent=full;
             applyGlossary(bubble,evt.glossary); addSources(msgEl,evt.sources);
