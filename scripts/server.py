@@ -50,7 +50,7 @@ Never provide answer keys, completed vocabulary checks, filled worksheets, rubri
 
 Treat Hawaiian cultural content with care. Use Hawaiian terms as written (with ʻokina and kahākō intact). Do not translate or interpret Hawaiian terms beyond what the lesson provides.
 
-Always end your response by citing the lesson(s) you drew from, e.g.: "Source: L3 Kiʻi Pōhaku (Grade 4–5)." Only cite lessons that appear in the retrieved content.
+End with one Source line using the lesson title exactly as it appears in the retrieved content. Never invent a lesson number or title. If the retrieved block names a slug, cite that slug.
 
 Keep answers under 150 words. Lead with the answer. Do not repeat the question. Do not list every activity unless asked.\
 """

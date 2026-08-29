@@ -1,5 +1,5 @@
 {
-  "ts": "2026-08-29T03:44:50.037870+00:00",
+  "ts": "2026-08-29T03:46:01.891709+00:00",
   "n": 28,
   "pass": 28,
   "fail": 0,
@@ -38,7 +38,7 @@
         "k-ahupuaa-community-resources-ahupuaa-natural-resources-diagram",
         "prek-look-up-at-the-lewa-celestial-objects"
       ],
-      "answer_preview": "Hawaiians memorized where more than 200 stars rise and fall in the night sky to determine north, south, east, and west. They used these star positions at night to know if they were heading in the right direction toward different places in the world. This practice is part of wayfinding, which involves using celestial objects like stars alongside other natural resources for navigation across the Pac"
+      "answer_preview": "Hawaiians memorized where more than 200 stars rise and fall in the night sky to identify north, south, east, and west. They used these star positions at night to know if they were heading in the right direction toward different places in the world. This practice is part of wayfinding, which involves using celestial objects like stars alongside other natural resources such as wind patterns for navi"
     },
     {
       "id": "open-measurement",
@@ -46,9 +46,10 @@
       "pass": true,
       "reason": "gold lesson in sources",
       "lessons": [
-        "2-3-everyday-anakahi-measure-hunt"
+        "2-3-everyday-anakahi-measure-hunt",
+        "4-5-hanawai-dashing-through-auwai"
       ],
-      "answer_preview": "Yes, according to the lesson content, ancient Hawaiian people had their own units of measurement such as kīkoʻo, pīʻā, anana, and anakahi. They used these to measure things like fish (e.g., a 6-inch ʻula pāpapa or a seven-foot ʻahi), fishing lines, spears, and nets based on the size of the object being measured. /  / Source: L3 Kiʻi Pōhaku (Grade 4–5)."
+      "answer_preview": "Yes, ancient Hawaiian people had their own units of measurement called anakahi. The text explains that they used specific units like kīkoʻo or pīʻā for smaller sea animals (e.g., a 6-inch ʻula pāpapa) and larger units like anana for bigger ones (e.g., a seven-foot ʻahi). They also used their anakahi to measure fishing lines, spears, or nets. Students were asked to decide which anakahi they would u"
     },
     {
       "id": "open-dash",
