@@ -452,17 +452,30 @@ def _extract_lesson_html(path):
 
         seen: set = set()
         for table in doc.tables:
-            rows_html = []
-            for row in table.rows:
+            header_html = []
+            body_html = []
+            for i, row in enumerate(table.rows):
                 cells = []
+                is_header = i == 0
+                tag = 'th' if is_header else 'td'
+                extra = ' scope="col"' if is_header else ''
                 for cell in row.cells:
                     if id(cell) not in seen and cell.text.strip():
                         seen.add(id(cell))
-                        cells.append(f'<td>{_html.escape(cell.text.strip())}</td>')
-                if cells:
-                    rows_html.append('<tr>' + ''.join(cells) + '</tr>')
-            if rows_html:
-                parts.append('<table class="ltable"><tbody>' + ''.join(rows_html) + '</tbody></table>')
+                        cells.append(
+                            f'<{tag}{extra}>{_html.escape(cell.text.strip())}</{tag}>'
+                        )
+                if not cells:
+                    continue
+                row_html = '<tr>' + ''.join(cells) + '</tr>'
+                if is_header:
+                    header_html.append(row_html)
+                else:
+                    body_html.append(row_html)
+            if header_html or body_html:
+                thead = f'<thead>{"".join(header_html)}</thead>' if header_html else ''
+                tbody = f'<tbody>{"".join(body_html)}</tbody>' if body_html else ''
+                parts.append(f'<table class="ltable">{thead}{tbody}</table>')
 
         return '\n'.join(parts)
 
