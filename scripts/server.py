@@ -430,13 +430,13 @@ def _extract_lesson_html(path):
             style = (p.style.name if p.style else '').lower()
             if any(h in style for h in ('heading 1', 'title')):
                 flush_list()
-                parts.append(f'<h2>{_html.escape(text)}</h2>')
+                parts.append(f'<h3>{_html.escape(text)}</h3>')
             elif 'heading 2' in style:
                 flush_list()
-                parts.append(f'<h3>{_html.escape(text)}</h3>')
+                parts.append(f'<h4>{_html.escape(text)}</h4>')
             elif any(h in style for h in ('heading 3', 'heading 4', 'heading 5', 'heading 6')):
                 flush_list()
-                parts.append(f'<h4>{_html.escape(text)}</h4>')
+                parts.append(f'<h5>{_html.escape(text)}</h5>')
             elif 'list' in style:
                 pending_li.append(_html.escape(text))
             else:

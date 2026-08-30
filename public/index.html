@@ -504,7 +504,7 @@
         <button type="button" class="btn-close" id="btn-close" aria-label="Close lesson">&times;</button>
       </div>
     </div>
-    <div class="modal-body" id="modal-body">
+    <div class="modal-body" id="modal-body" tabindex="0" aria-label="Lesson content">
       <span class="modal-loading">Loading&hellip;</span>
     </div>
   </div>
@@ -731,7 +731,15 @@ async function openLesson(id, title, opener){
     if(!r.ok) throw new Error('HTTP '+r.status);
     const d=await r.json();
     document.getElementById('modal-grades').textContent='Grade '+d.grades.join(', ');
-    document.getElementById('modal-body').innerHTML=d.html||('<p>'+esc(d.text).replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')+'</p>');
+    const body=document.getElementById('modal-body');
+    body.innerHTML=d.html||('<p>'+esc(d.text).replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')+'</p>');
+    ['h4','h3','h2'].forEach(tag=>{
+      body.querySelectorAll(tag).forEach(el=>{
+        const n=document.createElement('h'+(Number(tag[1])+1));
+        n.innerHTML=el.innerHTML;
+        el.replaceWith(n);
+      });
+    });
   } catch(e){
     document.getElementById('modal-body').innerHTML='<span style="color:var(--red)">Could not load lesson: '+esc(String(e))+'</span>';
   }
