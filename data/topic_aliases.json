@@ -1,0 +1,20 @@
+{
+  "aliases": {
+    "navigation": ["wayfinding", "navigate", "voyaging", "hoku", "stars"],
+    "navigate": ["wayfinding", "navigation", "voyaging"],
+    "wayfinding": ["navigation", "navigate", "voyaging", "hoku", "stars", "battleship"],
+    "voyaging": ["wayfinding", "navigation", "waa", "canoe"],
+    "stars": ["hoku", "lewa", "celestial", "wayfinding"],
+    "hoku": ["stars", "lewa", "celestial", "wayfinding"],
+    "3d shapes": ["3d", "three-dimensional", "three dimensional", "composite shapes"],
+    "3d": ["3d shapes", "three-dimensional", "composite shapes"],
+    "three dimensional": ["3d shapes", "3d"],
+    "three-dimensional": ["3d shapes", "3d"],
+    "measurement": ["anakahi", "measure", "hanawai"],
+    "anakahi": ["measurement", "measure"],
+    "dash": ["robot", "programming", "dash bowling"],
+    "kalo": ["taro", "harvest"],
+    "fishpond": ["loko", "loko ia"],
+    "loko ia": ["fishpond", "loko"]
+  }
+}

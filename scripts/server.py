@@ -26,10 +26,23 @@ from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from slowapi.util import get_remote_address
 
+from scripts.retrieve import (
+    SKIP_LNUM,
+    SKIP_NAME,
+    grade_phrase,
+    lesson_grade_phrase,
+    lexical_hits,
+    is_short_query,
+    load_aliases,
+    merge_ranked,
+    split_vector_hits,
+)
+
 BASE = Path.home() / "kapilinanoeau"
 CHROMA_DIR = BASE / "data/chroma"
 GLOSSARY_PATH = BASE / "data/glossary.json"
 GRADE_MAP_PATH = BASE / "data/grade_map.json"
+ALIAS_PATH = BASE / "data/topic_aliases.json"
 EMBED_MODEL = "intfloat/multilingual-e5-large"
 OLLAMA_HOST = "http://localhost:11434"
 OLLAMA_MODEL = "qwen3.5:9b"  # instruct; thinking off. llama3:latest leaked keys in bakeoff.
@@ -75,6 +88,7 @@ async def lifespan(app: FastAPI):
 
     state["glossary"] = json.loads(GLOSSARY_PATH.read_text()) if GLOSSARY_PATH.exists() else {}
     state["grade_map"] = json.loads(GRADE_MAP_PATH.read_text()) if GRADE_MAP_PATH.exists() else {}
+    state["aliases"] = load_aliases(ALIAS_PATH)
 
     print("Pre-warming Ollama...")
     async with httpx.AsyncClient(timeout=30) as c:
@@ -196,6 +210,37 @@ async def health():
     }
 
 
+def _chunks_for_lessons(collection, ranked: list[tuple[int, str]]) -> list[tuple[str, dict]]:
+    """One Chroma chunk per lexical lesson id (prefer extended, then first chunk)."""
+    lids = [lid for _, lid in ranked if lid and not SKIP_LNUM.match(lid)]
+    if not lids:
+        return []
+    got = collection.get(
+        where={"lesson": {"$in": lids}},
+        include=["documents", "metadatas"],
+    )
+    best: dict[str, tuple] = {}
+    for d, m in zip(got.get("documents") or [], got.get("metadatas") or []):
+        m = m or {}
+        if SKIP_NAME.search(m.get("filename") or ""):
+            continue
+        lid = m.get("lesson") or ""
+        if not lid or SKIP_LNUM.match(lid):
+            continue
+        fn = (m.get("filename") or "").lower()
+        idx = int(m.get("chunk_idx") or 0)
+        rank = (0 if "__extended" in fn else 1, idx)
+        prev = best.get(lid)
+        if prev is None or rank < prev[0]:
+            best[lid] = (rank, d, m)
+    out: list[tuple[str, dict]] = []
+    for _, lid in ranked:
+        hit = best.get(lid)
+        if hit:
+            out.append((hit[1], hit[2]))
+    return out
+
+
 def match_glossary(text: str) -> list[dict]:
     norm = unicodedata.normalize("NFC", text.lower())
     return [
@@ -229,7 +274,7 @@ async def sse_stream(request: QueryRequest):
 
     results = collection.query(
         query_embeddings=[query_emb],
-        n_results=24 if request.grade != "all" else TOP_K * 2,
+        n_results=24,
         include=["documents", "metadatas", "distances"],
     )
 
@@ -237,27 +282,30 @@ async def sse_stream(request: QueryRequest):
     metas = results["metadatas"][0]
     dists = results["distances"][0]
 
-    def grade_ok(m):
-        return request.grade == "all" or request.grade in m.get("grades", "").split(",")
+    same_v, other_v = split_vector_hits(docs, metas, dists, request.grade, SIM_THRESHOLD)
 
-    skip_name = re.compile(r"(?i)(vocabulary check|answer sheet|answer key|rubric)")
+    ranked_lex = lexical_hits(
+        request.question,
+        state.get("grade_map") or {},
+        state.get("aliases") or {},
+        limit=8,
+    )
+    lex_chunks = await asyncio.to_thread(_chunks_for_lessons, collection, ranked_lex)
+    same_lex, other_lex = [], []
+    for d, m in lex_chunks:
+        if request.grade == "all" or request.grade in (m.get("grades") or "").split(","):
+            same_lex.append((d, m))
+        else:
+            other_lex.append((d, m))
 
-    filtered = []
-    seen_lessons: set[str] = set()
-    for d, m, dist in zip(docs, metas, dists):
-        if (1 - dist) < SIM_THRESHOLD or not grade_ok(m):
-            continue
-        if skip_name.search(m.get("filename") or ""):
-            continue
-        lid = m.get("lesson") or m.get("filename") or ""
-        if re.match(r"^L\d+$", lid or "", re.I):
-            continue
-        if lid in seen_lessons:
-            continue
-        seen_lessons.add(lid)
-        filtered.append((d, m))
-        if len(filtered) >= TOP_K:
-            break
+    filtered, cross_grade = merge_ranked(
+        same_v,
+        same_lex,
+        other_v,
+        other_lex,
+        TOP_K,
+        prefer_lex=is_short_query(request.question),
+    )
 
     if not filtered:
         msg = "I don't see that covered in the matched lessons — try rephrasing or selecting a different grade."
@@ -283,6 +331,20 @@ async def sse_stream(request: QueryRequest):
             sources.append({"title": m.get("title", fn), "lesson": m.get("lesson", ""),
                             "grades": m.get("grades", ""), "filename": fn})
 
+    user_q = request.question
+    if cross_grade and request.grade != "all":
+        first_m = filtered[0][1]
+        closest_title = first_m.get("title") or first_m.get("lesson") or "another lesson"
+        closest_g = lesson_grade_phrase(first_m.get("grades") or "")
+        filt = grade_phrase(request.grade)
+        user_q = (
+            f"The teacher filtered to {filt}. There is no {filt} lesson on this topic. "
+            f"The closest match is {closest_title} ({closest_g}). "
+            f'Lead with: "No {filt} lesson on this. Closest is {closest_title} ({closest_g})." '
+            f"Then answer from the retrieved content. Do not say it is not covered.\n\n"
+            f"Teacher question: {request.question}"
+        )
+
     messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
         {"role": "user", "content": f"Retrieved lesson content:\n{context}"},
@@ -291,7 +353,7 @@ async def sse_stream(request: QueryRequest):
         if m.role not in ("user", "assistant"):
             continue
         messages.append({"role": m.role, "content": m.content})
-    messages.append({"role": "user", "content": request.question})
+    messages.append({"role": "user", "content": user_q})
 
     yield f"data: {json.dumps({'status': 'writing'})}\n\n"
 

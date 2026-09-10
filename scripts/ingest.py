@@ -125,11 +125,10 @@ def main():
         chunks = chunk_text(text)
         print(f"  {path.name}  lesson={lesson_num}  grades={grades}  {len(chunks)} chunks")
 
-        ids, embeddings, documents, metadatas = [], [], [], []
+        ids, documents, metadatas = [], [], []
         for i, chunk in enumerate(chunks):
             doc_id = hashlib.sha256(f"{path.name}::{i}".encode()).hexdigest()[:20]
             ids.append(doc_id)
-            embeddings.append(model.encode(f"passage: {chunk}", normalize_embeddings=True).tolist())
             documents.append(chunk)
             metadatas.append({
                 "filename": path.name,
@@ -142,6 +141,14 @@ def main():
             })
 
         if ids:
+            passage_texts = [f"passage: {title}\n{chunk}" for chunk in chunks]
+            embs = model.encode(
+                passage_texts,
+                normalize_embeddings=True,
+                batch_size=32,
+                show_progress_bar=False,
+            )
+            embeddings = embs.tolist()
             collection.upsert(ids=ids, embeddings=embeddings, documents=documents, metadatas=metadatas)
 
     total = collection.count()

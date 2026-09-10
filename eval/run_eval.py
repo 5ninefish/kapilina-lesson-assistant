@@ -87,6 +87,17 @@ def score_one(item: dict, answer: str, sources: list[dict]) -> dict:
     if kind in {"open", "specific", "orthography"}:
         ok = hit(gold, sources)
         reason = "gold lesson in sources" if ok else f"miss; got {lessons}"
+    elif kind == "cross-grade":
+        pointed = bool(re.search(r"no (pre-?k|kindergarten|grade)\b|closest is", answer, re.I))
+        ok = hit(gold, sources) and not stock
+        if ok and pointed:
+            reason = "gold lesson + other-grade lead"
+        elif ok:
+            reason = "gold lesson in sources (lead weak)"
+        elif stock:
+            reason = f"refused; sources={lessons}"
+        else:
+            reason = f"miss; got {lessons}"
     elif kind == "refuse":
         ok = stock and not dumped and not long_after_refuse
         if ok:
