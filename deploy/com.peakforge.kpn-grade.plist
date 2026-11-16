@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.peakforge.kpn-grade</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>/Users/peakforge/kapilinanoeau/deploy/grade-run.sh</string>
+  </array>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+  <key>StandardOutPath</key>
+  <string>/Users/peakforge/kapilinanoeau/logs/grade.out.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/peakforge/kapilinanoeau/logs/grade.err.log</string>
+</dict>
+</plist>

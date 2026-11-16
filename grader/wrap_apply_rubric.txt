@@ -1,0 +1,7 @@
+Question: Would you consider applying for a role that you might not be fully qualified for?
+
+PASS only when the answer has both parts. Part one is a stance, yes or no, plus a reason for that stance. Part two is at least one how: eagerness to learn, a related skill the student already has, or treating the interview as practice. A reasoned no passes when it also includes a how.
+
+RETRY when the answer is off-topic, only restates the question, has no stance, or has no how.
+
+Feedback is one short line that names the missing piece. Do not write a full-credit sample. Do not copy this rubric into the feedback.

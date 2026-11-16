@@ -1,0 +1,332 @@
+{
+  "at": "2026-11-16T19:44:36.853253+00:00",
+  "url": "http://127.0.0.1:8011/grade",
+  "count": 32,
+  "pass_hits": 10,
+  "false_passes": 0,
+  "leaks": 0,
+  "errors": 0,
+  "ok": true,
+  "rows": [
+    {
+      "id": "p1",
+      "expect": "pass",
+      "verdict": "pass",
+      "code": 200,
+      "false_pass": false,
+      "leak": false,
+      "error": false,
+      "feedback": "Complete"
+    },
+    {
+      "id": "p2",
+      "expect": "pass",
+      "verdict": "pass",
+      "code": 200,
+      "false_pass": false,
+      "leak": false,
+      "error": false,
+      "feedback": "Complete"
+    },
+    {
+      "id": "p3",
+      "expect": "pass",
+      "verdict": "pass",
+      "code": 200,
+      "false_pass": false,
+      "leak": false,
+      "error": false,
+      "feedback": "Complete"
+    },
+    {
+      "id": "p4",
+      "expect": "pass",
+      "verdict": "pass",
+      "code": 200,
+      "false_pass": false,
+      "leak": false,
+      "error": false,
+      "feedback": "Complete"
+    },
+    {
+      "id": "p5",
+      "expect": "pass",
+      "verdict": "pass",
+      "code": 200,
+      "false_pass": false,
+      "leak": false,
+      "error": false,
+      "feedback": "Complete"
+    },
+    {
+      "id": "p6",
+      "expect": "pass",
+      "verdict": "pass",
+      "code": 200,
+      "false_pass": false,
+      "leak": false,
+      "error": false,
+      "feedback": "Complete"
+    },
+    {
+      "id": "p7",
+      "expect": "pass",
+      "verdict": "retry",
+      "code": 200,
+      "false_pass": false,
+      "leak": false,
+      "error": false,
+      "feedback": "Missing a clear yes or no stance; 'wait' is not an explicit answer to the question."
+    },
+    {
+      "id": "p8",
+      "expect": "pass",
+      "verdict": "pass",
+      "code": 200,
+      "false_pass": false,
+      "leak": false,
+      "error": false,
+      "feedback": "Complete"
+    },
+    {
+      "id": "p9",
+      "expect": "pass",
+      "verdict": "retry",
+      "code": 200,
+      "false_pass": false,
+      "leak": false,
+      "error": false,
+      "feedback": "The answer lacks a clear stance (yes or no) and contains grammatical errors that obscure the intended meaning."
+    },
+    {
+      "id": "p10",
+      "expect": "pass",
+      "verdict": "pass",
+      "code": 200,
+      "false_pass": false,
+      "leak": false,
+      "error": false,
+      "feedback": "Complete"
+    },
+    {
+      "id": "p11",
+      "expect": "pass",
+      "verdict": "pass",
+      "code": 200,
+      "false_pass": false,
+      "leak": false,
+      "error": false,
+      "feedback": "Complete"
+    },
+    {
+      "id": "p12",
+      "expect": "pass",
+      "verdict": "pass",
+      "code": 200,
+      "false_pass": false,
+      "leak": false,
+      "error": false,
+      "feedback": "Complete"
+    },
+    {
+      "id": "r1",
+      "expect": "retry",
+      "verdict": "retry",
+      "code": 200,
+      "false_pass": false,
+      "leak": false,
+      "error": false,
+      "feedback": "Missing a reason for your stance and any 'how' element like eagerness to learn or treating the interview as practice."
+    },
+    {
+      "id": "r2",
+      "expect": "retry",
+      "verdict": "retry",
+      "code": 200,
+      "false_pass": false,
+      "leak": false,
+      "error": false,
+      "feedback": "Missing a 'how' component such as eagerness to learn or treating the interview as practice."
+    },
+    {
+      "id": "r3",
+      "expect": "retry",
+      "verdict": "retry",
+      "code": 200,
+      "false_pass": false,
+      "leak": false,
+      "error": false,
+      "feedback": "Answer lacks a clear stance and does not explain how to approach the situation."
+    },
+    {
+      "id": "r4",
+      "expect": "retry",
+      "verdict": "retry",
+      "code": 200,
+      "false_pass": false,
+      "leak": false,
+      "error": false,
+      "feedback": "Answer is off-topic; missing stance on job qualifications and a learning strategy."
+    },
+    {
+      "id": "r5",
+      "expect": "retry",
+      "verdict": "retry",
+      "code": 200,
+      "false_pass": false,
+      "leak": false,
+      "error": false,
+      "feedback": "Answer lacks a clear stance and does not explain how to handle the situation."
+    },
+    {
+      "id": "r6",
+      "expect": "retry",
+      "verdict": "retry",
+      "code": 200,
+      "false_pass": false,
+      "leak": false,
+      "error": false,
+      "feedback": "Missing a reason for your stance and any 'how' element like eagerness to learn or relevant skills."
+    },
+    {
+      "id": "r7",
+      "expect": "retry",
+      "verdict": "retry",
+      "code": 200,
+      "false_pass": false,
+      "leak": false,
+      "error": false,
+      "feedback": "Missing a 'how' element such as eagerness to learn or treating the interview as practice."
+    },
+    {
+      "id": "r8",
+      "expect": "retry",
+      "verdict": "retry",
+      "code": 200,
+      "false_pass": false,
+      "leak": false,
+      "error": false,
+      "feedback": "Missing a stance and a how related to applying for roles."
+    },
+    {
+      "id": "r9",
+      "expect": "retry",
+      "verdict": "retry",
+      "code": 200,
+      "false_pass": false,
+      "leak": false,
+      "error": false,
+      "feedback": "Answer lacks a specific 'how' element like eagerness to learn or treating the interview as practice."
+    },
+    {
+      "id": "r10",
+      "expect": "retry",
+      "verdict": "retry",
+      "code": 200,
+      "false_pass": false,
+      "leak": false,
+      "error": false,
+      "feedback": "Missing a clear stance on whether to apply and a specific 'how' strategy."
+    },
+    {
+      "id": "r11",
+      "expect": "retry",
+      "verdict": "retry",
+      "code": 200,
+      "false_pass": false,
+      "leak": false,
+      "error": false,
+      "feedback": "Missing a clear stance on whether to apply for the role."
+    },
+    {
+      "id": "r12",
+      "expect": "retry",
+      "verdict": "retry",
+      "code": 200,
+      "false_pass": false,
+      "leak": false,
+      "error": false,
+      "feedback": "Missing a stance on applying for roles and a specific how to handle it."
+    },
+    {
+      "id": "r13",
+      "expect": "retry",
+      "verdict": "retry",
+      "code": 200,
+      "false_pass": false,
+      "leak": false,
+      "error": false,
+      "feedback": "Missing a clear stance and a specific 'how' to address the question."
+    },
+    {
+      "id": "r14",
+      "expect": "retry",
+      "verdict": "retry",
+      "code": 200,
+      "false_pass": false,
+      "leak": false,
+      "error": false,
+      "feedback": "Answer restates the question without providing a stance or a how."
+    },
+    {
+      "id": "r15",
+      "expect": "retry",
+      "verdict": "retry",
+      "code": 200,
+      "false_pass": false,
+      "leak": false,
+      "error": false,
+      "feedback": "Answer is off-topic and lacks a clear stance on applying for roles."
+    },
+    {
+      "id": "r16",
+      "expect": "retry",
+      "verdict": "retry",
+      "code": 200,
+      "false_pass": false,
+      "leak": false,
+      "error": false,
+      "feedback": "Missing a clear stance on whether to apply and a specific 'how' strategy."
+    },
+    {
+      "id": "r17",
+      "expect": "retry",
+      "verdict": "retry",
+      "code": 200,
+      "false_pass": false,
+      "leak": false,
+      "error": false,
+      "feedback": "Missing a clear stance (yes or no) and a reason for that position."
+    },
+    {
+      "id": "r18",
+      "expect": "retry",
+      "verdict": "retry",
+      "code": 200,
+      "false_pass": false,
+      "leak": false,
+      "error": false,
+      "feedback": "Missing a reason for your stance and any 'how' to handle the situation."
+    },
+    {
+      "id": "r19",
+      "expect": "retry",
+      "verdict": "retry",
+      "code": 200,
+      "false_pass": false,
+      "leak": false,
+      "error": false,
+      "feedback": "Answer lacks a clear stance and does not include a 'how' component."
+    },
+    {
+      "id": "r20",
+      "expect": "retry",
+      "verdict": "retry",
+      "code": 200,
+      "false_pass": false,
+      "leak": false,
+      "error": false,
+      "feedback": "Missing a stance on applying for roles and a specific 'how' to address it."
+    }
+  ]
+}

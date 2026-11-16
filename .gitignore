@@ -5,6 +5,7 @@ data/lesson_index.csv
 data/fetch_manifest.json
 data/chroma/
 data/.auth
+data/.grade-secret
 venv/
 __pycache__/
 *.pyc
